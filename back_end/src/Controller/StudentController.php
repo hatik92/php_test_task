@@ -49,9 +49,7 @@ class StudentController {
     private function getSearch($search)
     {
         $result = $this->student->find($search);
-        if (! $result) {
-            print_r($this->notFoundResponse());
-            die;
+        if (!$result) {
             return $this->notFoundResponse();
         }
         $response['status_code_header'] = 'HTTP/1.1 200 OK';

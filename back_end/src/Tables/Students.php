@@ -25,7 +25,7 @@ class Students {
 
     public function find($search)
     {
-        $statement = "SELECT * FROM students WHERE title='$search' OR author='$search'";
+        $statement = "SELECT * FROM students WHERE `name`LIKE '%$search%' OR surname LIKE '%$search%'";
 
         try {
             $statement = $this->db->prepare($statement);

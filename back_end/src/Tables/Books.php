@@ -11,18 +11,20 @@ class Books
     {
         $this->db = $db;
     }
+
     public function getAvailable($result)
     {
         $available = "SELECT book_id, COUNT(*) AS count FROM book_student GROUP BY book_id";
         $available = $this->db->query($available);
 
         $resultAvailable = $available->fetchAll(\PDO::FETCH_ASSOC);
+
         for ($i = 0; $i < count($result); $i++) {
             $id = (int)$result[$i]['id'];
             $result[$i]['students'] = $this->db
                 ->query("SELECT * FROM students WHERE id IN (SELECT student_id FROM book_student WHERE book_id = $id)")
                 ->fetchAll(\PDO::FETCH_ASSOC);
-
+            $result[$i]['available'] = $result[$i]['count'];
             for ($j = 0; $j < count($resultAvailable); $j++) {
                 if ($result[$i]['id'] == $resultAvailable[$j]['book_id']) {
                     $result[$i]['available'] = $result[$i]['count'] - $resultAvailable[$j]['count'];
@@ -31,6 +33,7 @@ class Books
         }
         return $result;
     }
+
     public function allBooks()
     {
         $books = "SELECT * FROM books";

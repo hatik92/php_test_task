@@ -70,10 +70,19 @@ class BookController
         if (!$this->validateAssign($input)) {
             return $this->unprocessableEntityResponse();
         }
-        $this->book->insert($input);
-        $response['status_code_header'] = 'HTTP/1.1 201 Created';
-        $response['body'] = null;
-        return $response;
+        // var_dump(!!$this->book->insert($input));die;
+        // $this->book->insert($input);
+        if (!!$this->book->insert($input)) {
+            $response['status_code_header'] = 'HTTP/1.1 201 Created';
+            $response['body'] = null;
+            var_dump('This book has been added successfully');
+            return $response;
+        } else {
+            $response['status_code_header'] = 'HTTP/1.1 400 Bad Request';
+            $response['body'] = null;
+            var_dump('Something went wrong!');
+            return $response;
+        }
     }
 
     private function unssingBook()
@@ -82,10 +91,18 @@ class BookController
         if (!$this->validateAssign($input)) {
             return $this->unprocessableEntityResponse();
         }
-        $this->book->delete($input);
-        $response['status_code_header'] = 'HTTP/1.1 200 OK';
-        $response['body'] = null;
-        return $response;
+        
+        if(!!$this->book->delete($input)) {
+            $response['status_code_header'] = 'HTTP/1.1 200 OK';
+            $response['body'] = null;
+            var_dump('This book has been successfully deleted');
+            return $response;
+        } else {
+            $response['status_code_header'] = 'HTTP/1.1 400 Bad Request';
+            $response['body'] = null;
+            var_dump('Something went wrong!');
+            return $response;
+        }
     }
 
     private function validateAssign($input)

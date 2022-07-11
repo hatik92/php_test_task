@@ -23,6 +23,7 @@ if ($uri[1] !== 'back_end') {
 
 $requestMethod = $_SERVER["REQUEST_METHOD"];
 $controller;
+
 if ($requestMethod == "GET") {
     foreach ($_GET as $key => $value) {
         switch ($key) {
@@ -35,6 +36,10 @@ if ($requestMethod == "GET") {
                 break;
             case 'students':
                 $controller = new StudentController($dbConnection, $requestMethod);
+                break;
+            case 'searchStudent':
+                $searchStudent = $_GET['searchStudent'];
+                $controller = new StudentController($dbConnection, $requestMethod, $searchStudent);
                 break;
             default:
                 echo 'Some other message';
