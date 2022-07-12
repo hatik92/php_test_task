@@ -23,6 +23,10 @@ class BookController
     {
         switch ($this->requestMethod) {
             case 'GET':
+                if (is_numeric($this->searchBook)) {
+                    $response = $this->getBook($this->searchBook);
+                    break;
+                }
                 if ($this->searchBook && $this->searchBook != '') {
                     $response = $this->getSearch($this->searchBook);
                 } else {
@@ -50,6 +54,14 @@ class BookController
         $result = $this->book->allBooks();
         $response['status_code_header'] = 'HTTP/1.1 200 OK';
         $response['body'] = json_encode($result);
+        return $response;
+    }
+
+    private function getBook($id)
+    {
+        $result = $this->book->book($id);
+        $response['status_code_header'] = 'HTTP/1.1 200 OK';
+        $response['body'] = json_encode($result[0]);
         return $response;
     }
 

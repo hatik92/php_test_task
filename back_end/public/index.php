@@ -34,6 +34,10 @@ if ($requestMethod == "GET") {
                 $searchBook = $_GET['searchBook'];
                 $controller = new BookController($dbConnection, $requestMethod, $searchBook);
                 break;
+            case 'book':
+                $searchBook = $_GET['book'];
+                $controller = new BookController($dbConnection, $requestMethod, $searchBook);
+                break;
             case 'students':
                 $controller = new StudentController($dbConnection, $requestMethod);
                 break;

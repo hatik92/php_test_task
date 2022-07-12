@@ -47,6 +47,20 @@ class Books
         }
     }
 
+    public function book($id)
+    {
+        
+        $book = "SELECT * FROM books WHERE id = $id";
+        try {
+            $book = $this->db->query($book);
+            $result = $book->fetchAll(\PDO::FETCH_ASSOC);
+            $result = $this->getAvailable($result);
+            return $result;
+        } catch (\PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
     public function find($search)
     {
         $statement = "SELECT * FROM books WHERE title LIKE '%$search%' OR author LIKE '%$search%'";

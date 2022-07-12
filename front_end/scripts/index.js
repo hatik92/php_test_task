@@ -154,7 +154,7 @@ async function showBook(id) {
   }
   Swal.fire({
     customClass: 'swal-height',
-    title: 'Obout',
+    title: 'About',
     html: '<h3>Book: ' + book.title.toUpperCase() + '</h3>' +
       '<p>Author: ' + book.author + '</p>' +
       '<p>Year: ' + book.year + '</p>' +
