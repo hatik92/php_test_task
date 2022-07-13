@@ -10,7 +10,7 @@ class StudentController {
     private $searchStudent;
 
 
-    public function __construct($db, $requestMethod, $searchStudent = null)
+    public function __construct($db, $requestMethod, $rout, $searchStudent = null)
     {
         $this->db = $db;
         $this->requestMethod = $requestMethod;

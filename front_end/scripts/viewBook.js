@@ -5,11 +5,12 @@ const urlParams = new URLSearchParams(params);
 const bookId = urlParams.get('book')
 console.log(+bookId);
 const bookView = document.getElementById('bookView')
-fetch('http://books-task.test/back_end/public/?book=' + +bookId)
+fetch('http://books-task-api.test/?books-book=' + +bookId)
   .then(res => {
     return res.clone().json();
   })
   .then(book => {
+    console.log(book);
     let studentsBook = ''
     let students = book.students
     if (students.length > 0) {

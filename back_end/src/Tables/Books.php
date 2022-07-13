@@ -16,14 +16,9 @@ class Books
     {
         $available = "SELECT book_id, COUNT(*) AS count FROM book_student GROUP BY book_id";
         $available = $this->db->query($available);
-
         $resultAvailable = $available->fetchAll(\PDO::FETCH_ASSOC);
-
+        
         for ($i = 0; $i < count($result); $i++) {
-            $id = (int)$result[$i]['id'];
-            $result[$i]['students'] = $this->db
-                ->query("SELECT * FROM students WHERE id IN (SELECT student_id FROM book_student WHERE book_id = $id)")
-                ->fetchAll(\PDO::FETCH_ASSOC);
             $result[$i]['available'] = $result[$i]['count'];
             for ($j = 0; $j < count($resultAvailable); $j++) {
                 if ($result[$i]['id'] == $resultAvailable[$j]['book_id']) {
@@ -51,11 +46,12 @@ class Books
     {
         
         $book = "SELECT * FROM books WHERE id = $id";
+        $students = "SELECT students.id, `name`, surname, book_student.id AS bookStudenId FROM `students` INNER JOIN `book_student` ON students.id = student_id AND book_student.book_id = $id";
         try {
-            $book = $this->db->query($book);
-            $result = $book->fetchAll(\PDO::FETCH_ASSOC);
-            $result = $this->getAvailable($result);
-            return $result;
+            $book = $this->db->query($book)->fetch(\PDO::FETCH_ASSOC);
+            $students = $this->db->query($students)->fetchAll(\PDO::FETCH_ASSOC);
+            $book['students'] = $students;
+            return $book;
         } catch (\PDOException $e) {
             exit($e->getMessage());
         }
@@ -70,6 +66,18 @@ class Books
             $statement->execute(array($search));
             $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
             $result = $this->getAvailable($result);
+            return $result;
+        } catch (\PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+    
+    public function takingBooks($id) {
+        $takingBook = "SELECT books.id, books.title, books.author, books.`year`, books.count, book_student.id AS takeId FROM `books` INNER JOIN `book_student` ON books.id = book_id AND book_student.student_id = $id;";
+        
+        try {
+            $takingBook = $this->db->query($takingBook);
+            $result = $takingBook->fetchAll(\PDO::FETCH_ASSOC);
             return $result;
         } catch (\PDOException $e) {
             exit($e->getMessage());
@@ -97,18 +105,17 @@ class Books
         }
     }
 
-    public function delete(array $input)
+    public function delete($id)
     {
         $statement = "
             DELETE FROM book_student
-            WHERE book_id = :bookId AND student_id = :studentId;
+            WHERE id = :id;
         ";
 
         try {
             $statement = $this->db->prepare($statement);
             $statement->execute(array(
-                'bookId' => $input['bookId'],
-                'studentId'  => $input['studentId'],
+                'id' => $id
             ));
             return $statement->rowCount();
         } catch (\PDOException $e) {

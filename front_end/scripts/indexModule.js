@@ -8,7 +8,7 @@ document.getElementById('searchBook').addEventListener('change', (val) => {
   bodyLoader.style.display = "block"
   bookImg.style.display = "none"
   if (searchVal !== '') {
-    fetch(url + `?searchBook=${searchVal}`)
+    fetch(url + `?books-searchBook=${searchVal}`)
       .then(res => {
         bodyLoader.style.display = "none"
         bookImg.style.display = "block"
@@ -139,16 +139,20 @@ const unassignBook = (studentId, bookId) => {
 document.getElementById('switchBtn').addEventListener('click', (item) => {
   switch (item.target.value) {
     case 'Go to books':
-      bookBody.innerHTML = ''
       fetchBook()
+      // window.history.pushState("object or string", "Title", "/books");
+      bookBody.innerHTML = ''
+      document.getElementById('bookImg').className = 'bookImg'
       document.getElementById('switchBtn').value = 'Go to students'
       document.getElementById('searchBook').value = ''
       document.getElementById('bookBlock').style.display = ""
       document.getElementById('studentBlock').style.display = "none"
       break
       case 'Go to students':
-      studentBody.innerHTML = ''
       fetchStudent()
+      studentBody.innerHTML = ''
+      // window.history.pushState("object or string", "Title", "/students");
+      document.getElementById('bookImg').className = 'studentImg'
       document.getElementById('switchBtn').value = 'Go to books'
       document.getElementById('searchBook').value = ''
       document.getElementById('bookBlock').style.display = "none"
@@ -158,5 +162,17 @@ document.getElementById('switchBtn').addEventListener('click', (item) => {
       return
   }
 })
-
 fetchBook()
+
+// const pathname = window.location.pathname.split('/')
+//   console.log(pathname);
+//   switch (pathname[1]) {
+//     case 'books': 
+//       fetchBook()
+//       break;
+//     case 'students':
+//       fetchStudent()
+//       break;
+//     default:
+//       console.error("not found: ERROR 404");
+//   }

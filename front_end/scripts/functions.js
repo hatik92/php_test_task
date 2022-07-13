@@ -1,10 +1,11 @@
-export let url = '../back_end/public/index.php';
+export let url = 'http://books-task-api.test/';
 export const bookBody = document.getElementById('bookTableBody')
 export const studentBody = document.getElementById('studentTableBody')
 export const bodyLoader = document.getElementById('bodyLoading')
 export const bookImg = document.getElementById('bookImg')
 export const loader = document.createElement('div')
 loader.classList.add("loader");
+
 
 export const tableRowBook = (book) => {
   return `<tr>` +
@@ -23,7 +24,7 @@ export const tableRowStudent = (student) => {
     `<th scope='row'>${student.id}</th>` +
     `<td>${student.name}</td>` +
     `<td>${student.surname}</td>` +
-    `<td><button class='btn btn-warning' id="assignBookStudent${student.id}" data-id="${student.id}">Assign book</button></td>` +
+    `<td><button class='btn btn-warning' id="assignedBooks${student.id}" data-id="${student.id}">Assigned books</button></td>` +
     `</tr>`;
 }
 
@@ -40,15 +41,18 @@ export const bookStudent = (student) => {
 export const bookListModal = (book, studentId) => {
   return `<tr>` +
     `<td>${book.title.toUpperCase()}</td>` +
-    `<td id="book${book.id}">${book.available}</td>` +
-    `<td>` + 
-    `${book.disabled
-      //toxum enq mi hat
-      // disabledi hamar menak assigni hamar 
-      ? `<button class='btn btn-danger unassignBtn' data-bookId="${book.id}" data-studentId="${studentId}" id="bookUnassign${book.id}">Unassign</button>` + 
-      `<button class='btn btn-success assignBtn' style="display:none;" data-bookId="${book.id}" data-studentId="${studentId}" id="bookAssign${book.id}" ${book.available == 0 ? 'disabled' : ''}>Assign</button>`
-      : `<button class='btn btn-danger unassignBtn' style="display:none;" data-bookId="${book.id}" data-studentId="${studentId}" id="bookUnassign${book.id}">Unassign</button>` +
-      `<button class='btn btn-success assignBtn' data-bookId="${book.id}" data-studentId="${studentId}" id="bookAssign${book.id}" ${book.available == 0 ? 'disabled' : ''}>Assign</button>`}` + 
+    `<td id="book${book.id}">${book.author}</td>` +
+    `<td>` +
+    `<button class='btn btn-danger unassignBtn' data-takeBookStudent="${book.takeId}" data-studentId="${studentId}" id="bookUnassign${book.id}">Unassign</button>` +
+    // `<button class='btn btn-danger unassignBtn' style="${book.disabled ? '' : 'display:none;'}" data-takeBookStudent="${book.id}" data-studentId="${studentId}" id="bookUnassign${book.id}">Unassign</button>` +
+    // `<button class='btn btn-success assignBtn' style="${book.disabled ? 'display:none;' : ''}" data-bookId="${book.id}" data-studentId="${studentId}" id="bookAssign${book.id}" ${book.available == 0 || book.disabled ? 'disabled' : ''}>Assign</button>` + 
+    // `${book.disabled
+    //   //toxum enq mi hat
+    //   // disabledi hamar menak assigni hamar 
+    //   ? `<button class='btn btn-danger unassignBtn' data-bookId="${book.id}" data-studentId="${studentId}" id="bookUnassign${book.id}">Unassign</button>` + 
+    //   `<button class='btn btn-success assignBtn' style="display:none;" data-bookId="${book.id}" data-studentId="${studentId}" id="bookAssign${book.id}" ${book.available == 0 ? 'disabled' : ''}>Assign</button>`
+    //   : `<button class='btn btn-danger unassignBtn' style="display:none;" data-bookId="${book.id}" data-studentId="${studentId}" id="bookUnassign${book.id}">Unassign</button>` +
+    //   `<button class='btn btn-success assignBtn' data-bookId="${book.id}" data-studentId="${studentId}" id="bookAssign${book.id}" ${book.available == 0 ? 'disabled' : ''}>Assign</button>`}` + 
     `</td>` +
     `</tr>`;
 }
@@ -65,12 +69,14 @@ const fetchRequset = (param) => {
     })
 }
 async function allBooks() {
-  return await fetchRequset('?books')
+  return await fetchRequset('?books-allBooks')
 }
-export let bobobobo = ''
-// console.log(allBooks());
-// const allBooks = fetchRequset('?books')
+async function takingBooks(id) {
+  return await fetchRequset('?books-takingBooks=' + id)
+}
 export const fetchBook = () => {
+  // window.history.pushState("", "", "/books");
+
   bookImg.style.display = "none"
   bodyLoader.style.display = "block"
   allBooks()
@@ -84,7 +90,7 @@ export const fetchBook = () => {
       const showBook = document.querySelectorAll(`[id*="bookView"]`);
       showBook.forEach(el => el.addEventListener('click', event => {
         let id = event.target.getAttribute("data-id")
-        window.open(`http://books-task.test/front_end/bookView.html?book=${id}`);
+        window.open(`http://books-task.test/bookView.html?book=${id}`);
 
         let viewBook = document.getElementsByClassName('bookView')
         for (let i = 0; i < viewBook.length; i++) {
@@ -103,96 +109,55 @@ export const fetchBook = () => {
 }
 
 export const fetchStudent = () => {
+  // window.history.pushState("", "", "/students");
+
   bodyLoader.style.display = "block"
   bookImg.style.display = "none"
-  fetchRequset('?students')
-    .then(res => {
+  fetchRequset('?students-allStudents')
+    .then(students => {
       bodyLoader.style.display = "none"
       bookImg.style.display = "block"
       // studentBody.innerHTML = ''
-      for (let i = 0; i < res.length; i++) {
-        studentBody.innerHTML += tableRowStudent(res[i]);
+      for (let i = 0; i < students.length; i++) {
+        studentBody.innerHTML += tableRowStudent(students[i]);
       }
-      const showBook = document.querySelectorAll(`[id*="assignBookStudent"]`);
+      const showBook = document.querySelectorAll(`[id*="assignedBooks"]`);
       showBook.forEach(el => el.addEventListener('click', event => {
         let id = event.target.getAttribute("data-id")
-        allBooks()
+        takingBooks(id)
           .then(books => {
             let bookListTable = ''
-            console.log(res);
-            for (let i = 0; i < books.length; i++) {
-              for (let j = 0; j < books[i].students.length; j++) {
-                if (books[i].students[j].id == id) {
-                  books[i].disabled = true
-                  break;
-                }
+            if (books.length == 0) {
+              bookListTable = '<h2>No assigned books</h2>'
+            } else {
+              for (let i = 0; i < books.length; i++) {
+                bookListTable += bookListModal(books[i], id)
               }
-              bookListTable += bookListModal(books[i], id)
+              bookListTable = '<div id="assignedBooksBlock"><table class="table"><thead><th>Book</th><th>Author</th><th></th></thead><tbody id="assignedBooksTableBody">' +
+                bookListTable +
+                '</tbody></table></div>'
             }
             Swal.fire({
-              title: 'About' + id,
+              title: 'Assigned books',
               text: 'allbooks',
-              html: '<table class="table"><thead><th>Book</th><th>Available count</th><th></th></thead>' +
-                bookListTable +
-                '</table>',
+              html: bookListTable,
               customClass: 'swal-height'
             })
-            const assignBook = document.querySelectorAll(`[id*="bookAssign"]`);
-            assignBook.forEach(el => el.addEventListener('click', event => {
-              // let id = event.target.getAttribute("data-id")
-              let studentId = event.target.getAttribute("data-studentId")
-              let bookId = event.target.getAttribute("data-bookId")
-              el.setAttribute("disabled", "");
-              el.textContent = '';
-              el.appendChild(loader);
-              fetch(url, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ bookId, studentId }),
-              })
-                .then(res => {
-                  if (!res.ok) {
-                    Swal.fire({
-                      icon: 'error',
-                      title: res.statusText,
-                      text: 'Something went wrong!',
-                    })
-                  } else {
-                    console.log(el);
-                    // document.getElementsByClassName('loader').remove();
-                    el.textContent = 'Unassign';
-                    el.style.display = 'none';
-                    document.getElementById(`bookUnassign${bookId}`).style.display = 'flex'
-                    // el.classList.remove('btn-success');
-                    // el.classList.add('btn-danger');
-                    // el.id = `bookUnassign${bookId}`
-                    // el.removeAttribute("disabled");
-                    let bookCount = document.getElementById(`book${bookId}`).innerHTML;
-                    document.getElementById(`book${bookId}`).innerHTML = bookCount - 1
-                    // if (document.getElementById(`book${bookId}`).innerHTML == 0) {
-                    //   el.setAttribute("disabled", "");
-                    // }
-                  }
-                })
-                .catch(err => console.log(err))
-            }))
+            
             const unassignBook = document.querySelectorAll(`[id*="bookUnassign"]`);
             unassignBook.forEach(el => el.addEventListener('click', event => {
               // let id = event.target.getAttribute("data-id")
+              let takeBookStudent = event.target.getAttribute("data-takeBookStudent")
               let studentId = event.target.getAttribute("data-studentId")
               let bookId = event.target.getAttribute("data-bookId")
               el.setAttribute("disabled", "");
               el.textContent = '';
               el.appendChild(loader);
-              fetch(url, {
-                method: 'DELETE',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ bookId, studentId }),
-              })
+              fetch(url + `?books-delete=${takeBookStudent}`
+              // , {
+              //   method: 'DELETE'
+              // }
+              )
                 .then(res => {
                   if (!res.ok) {
                     Swal.fire({
@@ -201,19 +166,24 @@ export const fetchStudent = () => {
                       text: 'Something went wrong!',
                     })
                   } else {
+                    el.parentElement.parentElement.remove()
+                    if (document.getElementById('assignedBooksTableBody').innerHTML == '') {
+                      // document.getElementById('assignedBooksTableBody').remove()
+                      document.getElementById('assignedBooksBlock').innerHTML = '<h2>No assigned books</h2>'
+                    }
                     // debugger
                     // document.getElementsByClassName('loader').remove();
-                    el.textContent = 'Assign';
-                    el.style.display = 'none';
-                    console.log(document.getElementById(`bookAssign${bookId}`));
-                    document.getElementById(`bookAssign${bookId}`).style.display = 'flex'
+                    // el.textContent = 'Assign';
+                    // el.style.display = 'none';
+                    // console.log(document.getElementById(`bookAssign${bookId}`));
+                    // document.getElementById(`bookAssign${bookId}`).style.display = 'flex'
                     // el.classList.remove('btn-success');
                     // el.classList.add('btn-danger');
                     // el.id = `bookUnassign${bookId}`
                     // el.removeAttribute("disabled");
-                    let bookCount = +document.getElementById(`book${bookId}`).innerHTML;
+                    // let bookCount = +document.getElementById(`book${bookId}`).innerHTML;
                     // console.log(+bookCount);
-                    document.getElementById(`book${bookId}`).innerHTML = bookCount + 1
+                    // document.getElementById(`book${bookId}`).innerHTML = bookCount + 1
                     // if (document.getElementById(`book${bookId}`).innerHTML == 0) {
                     //   el.setAttribute("disabled", "");
                     // }
