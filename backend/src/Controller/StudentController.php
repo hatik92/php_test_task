@@ -1,32 +1,34 @@
 <?php
+
 namespace Src\Controller;
 
 use Src\Tables\Students;
 
-class StudentController {
+class StudentController
+{
 
     private $db;
     private $requestMethod;
     private $searchStudent;
 
 
-    public function __construct($db, $requestMethod, $rout, $searchStudent = null)
+    public function __construct($db, $requestMethod, $id = null)
     {
         $this->db = $db;
         $this->requestMethod = $requestMethod;
         $this->student = new Students($db);
-        $this->searchStudent = $searchStudent;
+        $this->id = $id;
     }
 
     public function processRequest()
     {
         switch ($this->requestMethod) {
             case 'GET':
-                if ($this->searchStudent) {
-                    $response = $this->getSearch($this->searchStudent);
+                if (isset($_GET['searchStudent']) && $_GET['searchStudent'] != '') {
+                    $response = $this->getSearch($_GET['searchStudent']);
                 } else {
                     $response = $this->getAllStudents();
-                };
+                }
                 break;
             default:
                 $response = $this->notFoundResponse();
@@ -56,7 +58,7 @@ class StudentController {
         $response['body'] = json_encode($result);
         return $response;
     }
-    
+
     private function notFoundResponse()
     {
         $response['status_code_header'] = 404;

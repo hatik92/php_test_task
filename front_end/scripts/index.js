@@ -274,3 +274,53 @@ const switchBlock = item => {
 }
 
 fetchBook()
+
+
+
+
+
+
+
+
+
+
+const assignBook = document.querySelectorAll(`[id*="bookAssign"]`);
+            assignBook.forEach(el => el.addEventListener('click', event => {
+              let studentId = event.target.getAttribute("data-studentId")
+              let bookId = event.target.getAttribute("data-bookId")
+              el.setAttribute("disabled", "");
+              el.textContent = '';
+              el.appendChild(loader);
+              fetch(url + '?books', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+                body: JSON.stringify({ bookId, studentId }),
+              })
+                .then(res => {
+                  if (!res.ok) {
+                    Swal.fire({
+                      icon: 'error',
+                      title: res.statusText,
+                      text: 'Something went wrong!',
+                    })
+                  } else {
+                    console.log(el);
+                    // document.getElementsByClassName('loader').remove();
+                    el.textContent = 'Unassign';
+                    el.style.display = 'none';
+                    document.getElementById(`bookUnassign${bookId}`).style.display = 'flex'
+                    // el.classList.remove('btn-success');
+                    // el.classList.add('btn-danger');
+                    // el.id = `bookUnassign${bookId}`
+                    // el.removeAttribute("disabled");
+                    let bookCount = document.getElementById(`book${bookId}`).innerHTML;
+                    document.getElementById(`book${bookId}`).innerHTML = bookCount - 1
+                    // if (document.getElementById(`book${bookId}`).innerHTML == 0) {
+                    //   el.setAttribute("disabled", "");
+                    // }
+                  }
+                })
+                .catch(err => console.log(err))
+            }))

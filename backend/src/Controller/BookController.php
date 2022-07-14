@@ -9,67 +9,48 @@ class BookController
 
     private $db;
     private $requestMethod;
-    private $param;
+    private $id;
 
-    public function __construct($db, $requestMethod, $rout, $param = null)
+    public function __construct($db, $requestMethod, $id = null)
     {
         $this->db = $db;
         $this->requestMethod = $requestMethod;
         $this->book = new Books($db);
-        $this->param = $param;
-        $this->rout = $rout;
+        $this->id = $id;
     }
 
     public function processRequest()
     {
+        // print_r($_GET);die;
         switch ($this->requestMethod) {
             case 'GET':
-                switch ($this->rout) {
-                    case 'allBooks':
+                if ($this->id) {
+                    $response = $this->getBook($this->id);
+                } else {
+                    if (isset($_GET['search']) && $_GET['search'] != '') {
+                        $response = $this->getSearch($_GET['search']);
+                    } elseif (isset($_GET['takingBooks']) && $_GET['takingBooks'] != '') {
+                        $response = $this->getTakingBooks((int) $_GET['takingBooks']);
+                    } else {
                         $response = $this->getAllBooks();
-                        break;
-                    case 'searchBook':
-                        if ($this->param != '') {
-                            $response = $this->getSearch($this->param);
-                        } else {
-                            $response = $this->getAllBooks();
-                        };
-                        break;
-                    case 'book':
-                        $response = $this->getBook($this->param);
-                        break;
-                    case 'takingBooks':
-                        $response = $this->getTakingBooks($this->param);
-                        break;
-                    case 'delete':
-                        $response = $this->unssingBook($this->param);
-                        break;
-                    default:
-                        $response = $this->notFoundResponse();
-                        break;
-                }
+                    }
+                };
                 break;
-                // if (is_numeric($this->param)) {
-                //     $response = $this->getBook($this->param);
-                //     break;
-                // }
-                // if ($this->param && $this->param != '') {
-                //     $response = $this->getSearch($this->param);
-                // } else {
-                //     $response = $this->getAllBooks();
-                // };
-                // break;
             case 'POST':
                 $response = $this->createAsignFromRequest();
                 break;
-            case 'DELETE':
-                $response = $this->unssingBook($this->param);
+            case strtoupper('delete'):
+                $response = $this->unssingBook();
                 break;
             default:
-                $response = $this->notFoundResponse();
+                // print_r(123);die;
+                // $response = $this->notFoundResponse();
+                // AREXCVAC
                 break;
         }
+
         header($response['status_code_header']);
+        // print_r($response);die;
         if ($response['body']) {
             print $response['body'];
         }
@@ -102,7 +83,8 @@ class BookController
         return $response;
     }
 
-    private function getTakingBooks($id) {
+    private function getTakingBooks($id)
+    {
         $result = $this->book->takingBooks($id);
         $response['status_code_header'] = 'HTTP/1.1 200 OK';
         $response['body'] = json_encode($result);
@@ -130,14 +112,14 @@ class BookController
         }
     }
 
-    private function unssingBook($id)
+    private function unssingBook()
     {
-        // $input = (array) json_decode(file_get_contents('php://input'), TRUE);
+        $input = (array) json_decode(file_get_contents('php://input'), TRUE);
         // if (!$this->validateAssign($input)) {
         //     return $this->unprocessableEntityResponse();
         // }
 
-        if (!!$this->book->delete($id)) {
+        if (!!$this->book->delete($input)) {
             $response['status_code_header'] = 'HTTP/1.1 200 OK';
             $response['body'] = null;
             var_dump('This book has been successfully deleted');

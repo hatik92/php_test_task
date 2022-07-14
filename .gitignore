@@ -1,3 +1,26 @@
 */vendor
 */.env
-/front-end
+# /front-end
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+front-end/node_modules
+front-end/.pnp
+front-end/.pnp.js
+
+front-end/# testing
+front-end/coverage
+
+front-end/# production
+front-end/build
+
+front-end/# misc
+front-end/.DS_Store
+front-end/.env.local
+front-end/.env.development.local
+front-end/.env.test.local
+front-end/.env.production.local
+
+front-end/npm-debug.log*
+front-end/yarn-debug.log*
+front-end/yarn-error.log*

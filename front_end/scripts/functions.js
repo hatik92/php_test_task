@@ -43,8 +43,8 @@ export const bookListModal = (book, studentId) => {
     `<td>${book.title.toUpperCase()}</td>` +
     `<td id="book${book.id}">${book.author}</td>` +
     `<td>` +
-    `<button class='btn btn-danger unassignBtn' data-takeBookStudent="${book.takeId}" data-studentId="${studentId}" id="bookUnassign${book.id}">Unassign</button>` +
-    // `<button class='btn btn-danger unassignBtn' style="${book.disabled ? '' : 'display:none;'}" data-takeBookStudent="${book.id}" data-studentId="${studentId}" id="bookUnassign${book.id}">Unassign</button>` +
+    `<button class='btn btn-danger unassignBtn' data-bookId="${book.id}" data-studentId="${studentId}" data-studentId="${studentId}" id="bookUnassign${book.id}">Unassign</button>` +
+    // `<button class='btn btn-danger unassignBtn' style="${book.disabled ? '' : 'display:none;'}" data-bookStudentId="${book.id}" data-studentId="${studentId}" id="bookUnassign${book.id}">Unassign</button>` +
     // `<button class='btn btn-success assignBtn' style="${book.disabled ? 'display:none;' : ''}" data-bookId="${book.id}" data-studentId="${studentId}" id="bookAssign${book.id}" ${book.available == 0 || book.disabled ? 'disabled' : ''}>Assign</button>` + 
     // `${book.disabled
     //   //toxum enq mi hat
@@ -57,7 +57,7 @@ export const bookListModal = (book, studentId) => {
     `</tr>`;
 }
 
-const fetchRequset = (param) => {
+export const fetchRequset = (param) => {
   return fetch(url + param)
     .then(res => {
       let viewBook = document.getElementsByClassName('bookView')
@@ -68,11 +68,11 @@ const fetchRequset = (param) => {
       return res.clone().json();
     })
 }
-async function allBooks() {
-  return await fetchRequset('?books-allBooks')
+export async function allBooks() {
+  return await fetchRequset('books')
 }
 async function takingBooks(id) {
-  return await fetchRequset('?books-takingBooks=' + id)
+  return await fetchRequset('books/?takingBooks=' + id)
 }
 export const fetchBook = () => {
   // window.history.pushState("", "", "/books");
@@ -113,7 +113,7 @@ export const fetchStudent = () => {
 
   bodyLoader.style.display = "block"
   bookImg.style.display = "none"
-  fetchRequset('?students-allStudents')
+  fetchRequset('students')
     .then(students => {
       bodyLoader.style.display = "none"
       bookImg.style.display = "block"
@@ -147,16 +147,21 @@ export const fetchStudent = () => {
             const unassignBook = document.querySelectorAll(`[id*="bookUnassign"]`);
             unassignBook.forEach(el => el.addEventListener('click', event => {
               // let id = event.target.getAttribute("data-id")
-              let takeBookStudent = event.target.getAttribute("data-takeBookStudent")
+              let bookStudentId = event.target.getAttribute("data-bookStudentId")
               let studentId = event.target.getAttribute("data-studentId")
               let bookId = event.target.getAttribute("data-bookId")
               el.setAttribute("disabled", "");
               el.textContent = '';
               el.appendChild(loader);
-              fetch(url + `?books-delete=${takeBookStudent}`
-              // , {
-              //   method: 'DELETE'
-              // }
+              fetch(url + `books`
+              , {
+                method: 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ bookId, studentId }),
+              }
+              
               )
                 .then(res => {
                   if (!res.ok) {

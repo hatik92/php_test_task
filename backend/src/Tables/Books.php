@@ -105,17 +105,18 @@ class Books
         }
     }
 
-    public function delete($id)
+    public function delete(array $input)
     {
         $statement = "
             DELETE FROM book_student
-            WHERE id = :id;
+            WHERE book_id = :bookId AND student_id = :studentId;
         ";
 
         try {
             $statement = $this->db->prepare($statement);
             $statement->execute(array(
-                'id' => $id
+                'bookId' => $input['bookId'],
+                'studentId'  => $input['studentId'],
             ));
             return $statement->rowCount();
         } catch (\PDOException $e) {

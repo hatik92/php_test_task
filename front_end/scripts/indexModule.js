@@ -8,7 +8,7 @@ document.getElementById('searchBook').addEventListener('change', (val) => {
   bodyLoader.style.display = "block"
   bookImg.style.display = "none"
   if (searchVal !== '') {
-    fetch(url + `?books-searchBook=${searchVal}`)
+    fetch(url + `books/?search=${searchVal}`)
       .then(res => {
         bodyLoader.style.display = "none"
         bookImg.style.display = "block"
@@ -21,6 +21,23 @@ document.getElementById('searchBook').addEventListener('change', (val) => {
           for (let i = 0; i < res.length; i++) {
             bookBody.innerHTML += tableRowBook(res[i]);
           }
+          const showBook = document.querySelectorAll(`[id*="bookView"]`);
+          showBook.forEach(el => el.addEventListener('click', event => {
+            let id = event.target.getAttribute("data-id")
+            window.open(`http://books-task.test/bookView.html?book=${id}`);
+
+            let viewBook = document.getElementsByClassName('bookView')
+            for (let i = 0; i < viewBook.length; i++) {
+              viewBook[i].setAttribute('disabled', '');
+            }
+            let book = res.find(el => el.id == id)
+            let studentsBook = ''
+            if (book.students.length > 0) {
+              for (let index = 0; index < book.students.length; index++) {
+                studentsBook += bookStudent(book.students[index], id);
+              }
+            }
+          }));
         }
       })
       .catch((err) => {
@@ -57,24 +74,6 @@ document.getElementById('searchStudent').addEventListener('change', val => {
       });
   } else fetchStudent()
 })
-// const showBook = document.querySelector(`[id*="bookView"]`);
-// console.log(showBook);
-// showBook.forEach(el => el.addEventListener('click', event => {
-//   console.log(123);
-// }));
-// async function showBook(id) {
-  
-//   let viewBook = document.getElementsByClassName('bookView')
-//   for (let i = 0; i < viewBook.length; i++) {
-//     viewBook[i].setAttribute('disabled', '');
-//   }
-//   // document.getElementsByClassName('bookView').setAttribute('disabled', '')
-//   const books = await fetchRequset('?books')
-//   let book = books.find(el => el.id == id)
-//   window.book = book
-//   window.open(
-//     "http://books-task.test/front_end/bookView.html", "_blank");
-// }
 
 const assignBook = (bookId, studentId, elem) => {
 
@@ -148,7 +147,7 @@ document.getElementById('switchBtn').addEventListener('click', (item) => {
       document.getElementById('bookBlock').style.display = ""
       document.getElementById('studentBlock').style.display = "none"
       break
-      case 'Go to students':
+    case 'Go to students':
       fetchStudent()
       studentBody.innerHTML = ''
       // window.history.pushState("object or string", "Title", "/students");
@@ -167,7 +166,7 @@ fetchBook()
 // const pathname = window.location.pathname.split('/')
 //   console.log(pathname);
 //   switch (pathname[1]) {
-//     case 'books': 
+//     case 'books':
 //       fetchBook()
 //       break;
 //     case 'students':
