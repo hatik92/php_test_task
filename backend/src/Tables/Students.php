@@ -36,4 +36,19 @@ class Students {
             exit($e->getMessage());
         }    
     }
+
+    public function assigned($bookId)
+    {
+
+        $students = "SELECT students.id, `name`, surname FROM students LEFT OUTER JOIN book_student ON students.id = student_id AND book_id = $bookId WHERE book_id is NULL";
+        
+        try {
+            $students = $this->db->query($students);
+            $result = $students->fetchAll(\PDO::FETCH_ASSOC);
+            return $result;
+        } catch (\PDOException $e) {
+            exit($e->getMessage());
+        }
+        
+    }
 }

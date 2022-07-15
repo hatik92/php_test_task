@@ -73,7 +73,7 @@ class Books
     }
     
     public function takingBooks($id) {
-        $takingBook = "SELECT books.id, books.title, books.author, books.`year`, books.count, book_student.id AS takeId FROM `books` INNER JOIN `book_student` ON books.id = book_id AND book_student.student_id = $id;";
+        $takingBook = "SELECT books.id, books.title, books.author, books.`year`, books.`count`, book_student.id AS takeId FROM `books` INNER JOIN `book_student` ON books.id = book_student.book_id AND book_student.student_id = $id;";
         
         try {
             $takingBook = $this->db->query($takingBook);

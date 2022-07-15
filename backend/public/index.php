@@ -12,7 +12,6 @@ header("Content-Type: text/html; application/json; charset=UTF-8");
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode('/', $uri);
-// print_r($uri);die;
 $id = null;
 if (isset($uri[2])) {
     $id = (int) $uri[2];
