@@ -1,35 +1,55 @@
 <?php
 
-use Src\Controller\BookController;
-use Src\Controller\StudentController;
+use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Http\Request;
 
-require "../connection.php";
+define('LARAVEL_START', microtime(true));
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Origin, Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, Accept");
-header("Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS");
-header("Content-Type: text/html; application/json; charset=UTF-8");
+/*
+|--------------------------------------------------------------------------
+| Check If The Application Is Under Maintenance
+|--------------------------------------------------------------------------
+|
+| If the application is in maintenance / demo mode via the "down" command
+| we will load this file so that any pre-rendered content can be shown
+| instead of starting the framework, which could cause an exception.
+|
+*/
 
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$uri = explode('/', $uri);
-$id = null;
-if (isset($uri[2])) {
-    $id = (int) $uri[2];
+if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
+    require $maintenance;
 }
 
-$requestMethod = $_SERVER["REQUEST_METHOD"];
+/*
+|--------------------------------------------------------------------------
+| Register The Auto Loader
+|--------------------------------------------------------------------------
+|
+| Composer provides a convenient, automatically generated class loader for
+| this application. We just need to utilize it! We'll simply require it
+| into the script here so we don't need to manually load our classes.
+|
+*/
 
-switch ($uri[1]) {
-    case 'books':
-        $controller = new BookController($dbConnection, $requestMethod, $id);
-        break;
-    case 'students':
-        $controller = new StudentController($dbConnection, $requestMethod, $id);
-        break;
-    default:
-        header("HTTP/1.1 404 Not Found");
-        exit();
-        break;
-}
+require __DIR__.'/../vendor/autoload.php';
 
-$controller->processRequest();
+/*
+|--------------------------------------------------------------------------
+| Run The Application
+|--------------------------------------------------------------------------
+|
+| Once we have the application, we can handle the incoming request using
+| the application's HTTP kernel. Then, we will send the response back
+| to this client's browser, allowing them to enjoy our application.
+|
+*/
+
+$app = require_once __DIR__.'/../bootstrap/app.php';
+
+$kernel = $app->make(Kernel::class);
+
+$response = $kernel->handle(
+    $request = Request::capture()
+)->send();
+
+$kernel->terminate($request, $response);

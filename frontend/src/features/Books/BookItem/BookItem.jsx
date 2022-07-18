@@ -1,8 +1,12 @@
 
-const BookItem = ({ title }) => {
+import { Link } from 'react-router-dom';
 
+const BookItem = ({ book }) => {
+  console.log(book.id);
   return <>
-    <h1>{title}</h1>
+    <li>
+      <Link to={'book/'+book.id} >{book.title}</Link>
+    </li>
   </>
 }
 

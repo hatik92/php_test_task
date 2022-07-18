@@ -8,15 +8,15 @@ const initialState = {
   initialized: false
 }
 
-export const getSearchBook = createAsyncThunk(
-  'books/status',
-  async (val) => {
-    return await books.getSearchBook(val)
+export const getBooks = createAsyncThunk(
+  'book/status',
+  async () => {
+    return await books.getAllBooks()
   }
 )
 
 
-export const searchBook = createSlice({
+export const gallerySlice = createSlice({
   name: 'books',
   initialState,
   reducers: {
@@ -24,10 +24,10 @@ export const searchBook = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getSearchBook.pending, (state) => {
+      .addCase(getBooks.pending, (state) => {
         state.initialized = false
       })
-      .addCase(getSearchBook.fulfilled, (state, action) => {
+      .addCase(getBooks.fulfilled, (state, action) => {
         console.log(action.payload);
         state.books = action.payload
         state.initialized = true
@@ -36,4 +36,4 @@ export const searchBook = createSlice({
 })
 
 
-export default searchBook.reducer
+export default gallerySlice.reducer

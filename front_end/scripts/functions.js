@@ -1,4 +1,4 @@
-export let url = 'http://books-task-api.test/';
+export let url = 'http://books-task-apiphp.test/';
 export const bookBody = document.getElementById('bookTableBody')
 export const studentBody = document.getElementById('studentTableBody')
 export const bodyLoader = document.getElementById('bodyLoading')

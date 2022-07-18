@@ -17,7 +17,10 @@ function App() {
           <Route index element={<Books />} />
           {/* <Route path="book" element={<Book />}> */}
           {/* <Route path=":teamId" element={<Team />} /> */}
-          <Route path="book" element={<Book />} />
+          <Route path="book">
+            <Route path=":bookId" element={<Book />} />
+          </Route>
+          {/* <Route path="book" element={<Book />} /> */}
           {/* <Route index element={<LeagueStandings />} /> */}
           {/* </Route> */}
         </Route>

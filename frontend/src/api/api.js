@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const booksApi = axios.create({
-  baseURL: 'http://books-task-api.test/'
+  baseURL: 'http://books-task-api.test/api/'
 })
 
 export const books = {

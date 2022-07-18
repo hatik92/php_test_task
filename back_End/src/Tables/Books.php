@@ -46,11 +46,14 @@ class Books
     {
         
         $book = "SELECT * FROM books WHERE id = $id";
-        $students = "SELECT students.id, `name`, surname, book_student.id AS bookStudenId FROM `students` INNER JOIN `book_student` ON students.id = student_id AND book_student.book_id = $id";
+        $students = "SELECT students.id, `username`, surname, book_student.id AS bookStudenId FROM `students` INNER JOIN `book_student` ON students.id = student_id AND book_student.book_id = $id";
         try {
             $book = $this->db->query($book)->fetch(\PDO::FETCH_ASSOC);
+            $book['students'] = [];
             $students = $this->db->query($students)->fetchAll(\PDO::FETCH_ASSOC);
-            $book['students'] = $students;
+            if ($students) {
+                $book['students'] = $students;
+            }
             return $book;
         } catch (\PDOException $e) {
             exit($e->getMessage());

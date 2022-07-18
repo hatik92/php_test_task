@@ -1,35 +1,40 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import Search from '../Search/Search'
 import BookItem from './BookItem/BookItem'
-import { getBooks, searchBook } from './booksSlice'
-import SearchBook from './SearchBook/SearchBook'
+import {
+  getBooks,
+} from './booksSlice'
 
 const Books = () => {
 
-  // const categoryParams = useParams
   const allBooks = useSelector(store => store.books.books)
-  const searchResult = useSelector(store => store.books.searchResult)
+  const [searchValue, setSearchValue] = useState('');
   const dispatch = useDispatch()
+
   useEffect(() => {
-    dispatch(getBooks())
-  }, []);
-  // const searchBookByVal = () => {
-  //   searchBook
-  // }
-  console.log(allBooks);
+    dispatch(getBooks());
+  }, [dispatch]);
+
+  const filterBooks = allBooks.filter(book => {
+    return (book.title.toLowerCase().includes(searchValue.toLowerCase()) || book.author.toLowerCase().includes(searchValue.toLowerCase()))
+  })
+
   return <>
     <div>
-      <SearchBook searchBookByVal={searchBook} />
+      <Search
+        value={searchValue}
+        setValue={setSearchValue}
+      />
       <div>
-        {searchResult.length > 0 ?
-          searchResult.map((book, i) =>
-            <BookItem key={i} title={book.title} />
-          )
-          :
-          allBooks.map((book, i) =>
-            <BookItem key={i} title={book.title} />
-          )
-        }
+        <ul>
+          {filterBooks.length ?
+            filterBooks.map((book) =>
+              <BookItem key={book.id} book={book} />
+            ) :
+            <h1>not found</h1>
+          }
+        </ul>
       </div>
     </div>
   </>

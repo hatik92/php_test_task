@@ -1,18 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { books } from "../../api/api";
-// import { Categoty } from "../Sidebar/SidebarSlice";
 
 
 const initialState = {
   books: [],
-  searchResult: [],
   initialized: false
 }
 
 export const getBooks = createAsyncThunk(
   'books/status',
   async () => {
-    return await books.getAllBooks()
+    return await books.getAllBooks().then(res => res.data)
   }
 )
 
@@ -20,18 +18,7 @@ export const getBooks = createAsyncThunk(
 export const booksSlice = createSlice({
   name: 'books',
   initialState,
-  reducers: {
-    searchBook:(state,action) => {
-      // debugger
-      console.log(action);
-      if (action.payload !== '') {
-        state.searchResult = state.books.filter(book => book.title.indexOf(action.payload) > -1 || book.author.indexOf(action.payload) > -1 )
-      }
-      else {
-        state.searchResult = []
-      }
-    }
-  },
+  reducers: { },
   extraReducers: (builder) => {
     builder
       .addCase(getBooks.pending, (state) => {
@@ -44,5 +31,4 @@ export const booksSlice = createSlice({
   }
 })
 
-export const { searchBook } = booksSlice.actions;
 export default booksSlice.reducer

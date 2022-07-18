@@ -57,7 +57,7 @@ const studentView = (student) => {
 }
 
 
-fetch('http://books-task-api.test/books/' + bookId)
+fetch('http://books-task-apiphp.test/books/' + bookId)
   .then(res => {
     return res.clone().json();
   })

@@ -5,15 +5,14 @@
 
     RewriteEngine On
 
-    # # Handle Authorization Header
-    # RewriteCond %{HTTP:Authorization} .
-    # RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
-    # RewriteRule ^([a-z]{2,2})/([a-zA-Z0-9_-]+)$ index.php?lang=$1&page=$2 [QSA]
-    RewriteRule ^ %1 [L]
+    RewriteRule ^ %1 [L,R=301]
 
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
