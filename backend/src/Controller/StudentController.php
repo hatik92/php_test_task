@@ -30,6 +30,8 @@ class StudentController
                     $response = $this->getAllStudents();
                 }
                 break;
+            case 'OPTIONS':
+                break;
             default:
                 $response = $this->notFoundResponse();
                 break;

@@ -36,6 +36,8 @@ class BookController
                     }
                 };
                 break;
+            case 'OPTIONS':
+                break;
             case 'POST':
                 $response = $this->createAsignFromRequest();
                 break;
