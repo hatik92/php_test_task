@@ -9,7 +9,7 @@ const initialState = {
 }
 
 export const getBooks = createAsyncThunk(
-  'book/status',
+  'student/studentStatus',
   async () => {
     return await books.getAllBooks()
   }

@@ -18,7 +18,7 @@ const initialState = {
 }
 
 export const getBook = createAsyncThunk(
-  'book/status',
+  'student/studentStatus',
   async (id) => {
     return await books.getBookById(id).then(res => res.data)
   }

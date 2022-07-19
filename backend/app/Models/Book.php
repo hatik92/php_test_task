@@ -17,7 +17,7 @@ class Book extends Model
     ];
 //    protected $guarded = ['is_admin'];
 
-//    protected $hidden = ['pivot'];
+    protected $hidden = ['pivot'];
 
     public function students()
     {

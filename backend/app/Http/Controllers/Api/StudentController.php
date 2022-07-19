@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\StudentResource;
+use App\Models\Book;
+use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
 {
@@ -12,9 +16,19 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if (!$request->bookId) {
+            return StudentResource::collection(Student::all());
+        }
+        else {
+        $students = Student::whereNotIn('id', function ($query) use ($request) {
+//                DB::table('book_student')
+            dd($query->table('book_student'));
+            $query->where('book_id', $request->bookId);
+            })->toSql();
+            dd($students);
+        }
     }
 
     /**

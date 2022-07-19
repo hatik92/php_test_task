@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Search = ({value, setValue}) => {
+const Search = ({value, setValue, ...props}) => {
   return <>
-    <input onChange={e => setValue(e.target.value)} value={value} />
+    <input className={props.classes} placeholder={props.placeholder} onChange={e => setValue(e.target.value)} value={value} />
   </>
 }
 

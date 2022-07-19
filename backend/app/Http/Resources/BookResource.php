@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\DB;
 
 class BookResource extends JsonResource
 {
@@ -20,7 +21,8 @@ class BookResource extends JsonResource
             'author' => $this->author,
             'year' => $this->year,
             'count' => $this->count,
-            'students' => StudentResource::collection($this->students)
+            'students' => StudentResource::collection($this->students),
+            'avaiable' => $this->students->count()
         ];
     }
 }

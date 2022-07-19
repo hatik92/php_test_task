@@ -1,0 +1,9 @@
+.bookLink {
+  color: black;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.bookLink:hover {
+  color: black;
+}

@@ -26,7 +26,7 @@ const Books = () => {
         value={searchValue}
         setValue={setSearchValue}
       />
-      <div>
+      <div className='px-2 w-75'>
         <ul>
           {filterBooks.length ?
             filterBooks.map((book) =>

@@ -30,9 +30,14 @@ const Book = (props) => {
           </div>
           <div>
             <ul className="list-group" id="bookObout1">
-              {book.students.map(student => {
-                <li className="list-group-item d-flex justify-content-between align-items-center" key={student.id} >Name: {student.surname}<button className="btn btn-danger" id="unassignBook1" data-id="1">Unassign</button></li>
-              })}
+              <li className="list-group-item d-flex justify-content-between align-items-center" id="unassign1">Name: Alvah Kerluke<button className="btn btn-danger" id="unassignBook1" data-id="1">Unassign</button></li>
+              <li className="list-group-item d-flex justify-content-between align-items-center" id="unassign3">Name: Prof. Vance Berge<button className="btn btn-danger" id="unassignBook3" data-id="3">Unassign</button></li>
+              <li className="list-group-item d-flex justify-content-between align-items-center" id="unassign5">Name: Mr. Stevie West V<button className="btn btn-danger" id="unassignBook5" data-id="5">Unassign</button></li>
+              <li className="list-group-item d-flex justify-content-between align-items-center" id="unassign7">Name: Joshuah Shields<button className="btn btn-danger" id="unassignBook7" data-id="7">Unassign</button></li>
+              <li className="list-group-item d-flex justify-content-between align-items-center" id="unassign11">Name: Dr. Ahmed Bogan<button className="btn btn-danger" id="unassignBook11" data-id="11">Unassign</button></li>
+              <li className="list-group-item d-flex justify-content-between align-items-center" id="unassign14">Name: Justyn Bernhard<button className="btn btn-danger" id="unassignBook14" data-id="14">Unassign</button></li>
+              <li className="list-group-item d-flex justify-content-between align-items-center" id="unassign17">Name: Manuel Berge<button className="btn btn-danger" id="unassignBook17" data-id="17">Unassign</button></li>
+              <li className="list-group-item d-flex justify-content-between align-items-center" id="unassign20">Name: Reyna Mohr<button className="btn btn-danger" id="unassignBook20" data-id="20">Unassign</button></li>
             </ul>
           </div>
         </div>

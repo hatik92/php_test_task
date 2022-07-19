@@ -1,35 +1,34 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { books } from "../../api/api";
+import { students } from "../../api/api";
 
 
 const initialState = {
-  books: [],
-  searchResult: [],
+  students: [],
   initialized: false
 }
 
-export const getBooks = createAsyncThunk(
-  'books/status',
+export const getStudents = createAsyncThunk(
+  'students/studentsStatus',
   async () => {
-    return await books.getAllBooks().then(res => res.data)
+    return await students.getAllStudents().then(res => res.data)
   }
 )
 
 
-export const booksSlice = createSlice({
-  name: 'books',
+export const studentsSlice = createSlice({
+  name: 'students',
   initialState,
   reducers: { },
   extraReducers: (builder) => {
     builder
-      .addCase(getBooks.pending, (state) => {
+      .addCase(getStudents.pending, (state) => {
         state.initialized = false
       })
-      .addCase(getBooks.fulfilled, (state, action) => {
-        state.books = action.payload
+      .addCase(getStudents.fulfilled, (state, action) => {
+        state.students = action.payload
         state.initialized = true
       })
   }
 })
 
-export default booksSlice.reducer
+export default studentsSlice.reducer

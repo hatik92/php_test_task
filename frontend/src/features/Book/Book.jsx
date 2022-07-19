@@ -1,8 +1,14 @@
 import React from 'react'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { getBook } from './bookSlice';
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import {
+  // useNavigate,
+  // useLocation,
+  useParams
+} from "react-router-dom";
+import BookModal from './BookModal/BookModal';
+import { Button } from 'react-bootstrap';
 
 
 const Book = (props) => {
@@ -11,12 +17,15 @@ const Book = (props) => {
   let { bookId } = useParams();
   // console.log(navigate, location, bookId);
   const book = useSelector(store => store.book.book)
+  const [show, setShow] = useState(false);
+
   // const [book, setbook] = useState('');
   const dispatch = useDispatch()
-  console.log(book.students);
   useEffect(() => {
     dispatch(getBook(bookId))
   }, [dispatch]);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   return (
     <div>
       <div className="container">
@@ -27,17 +36,26 @@ const Book = (props) => {
           <p>Available count: <span id="availableCount1"> undefined</span></p>
           <div className="d-flex justify-content-between">
             <h3>students who took the book</h3>
-            <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="assignBook" data-id="1">+ Assign</button>
+            <Button variant="primary" onClick={handleShow}>
+              + Assign
+            </Button>
+            {/* <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="assignBook" data-id="1">+ Assign</button> */}
           </div>
           <div>
             <ul className="list-group" id="bookObout1">
-            {book.students.map(student => 
+              {book.students.map(student =>
                 <li className="list-group-item d-flex justify-content-between align-items-center" key={student.id} >Name: {student.surname}<button className="btn btn-danger" id="unassignBook1" data-id="1">Unassign</button></li>
               )}
             </ul>
           </div>
         </div>
-      </div></div>
+      </div>
+      <BookModal
+        handleClose={handleClose}
+        show={show}
+        bookId={bookId}
+      />
+    </div>
   )
 }
 
