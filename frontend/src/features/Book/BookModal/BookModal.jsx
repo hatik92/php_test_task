@@ -1,62 +1,53 @@
 import React, { useEffect, useState } from 'react'
 import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
 import Search from '../../Search/Search';
-import { getStudents } from './../../Students/studentsSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import StudentModalItem from './StudentModalItem/StudentModalItem';
+import { addBookToStudent, getAssignStudents } from '../bookSlice';
 
 
 const BookModal = ({ show, handleClose, bookId }) => {
   const [searchValue, setSearchValue] = useState('');
-  const allStudents = useSelector(store => store.students.students);
+  const assignStudents = useSelector(store => store.book.assignStudents);
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getStudents(bookId));
-  }, [dispatch]);
-  const filterStudents = allStudents.filter(student => {
+    dispatch(getAssignStudents(bookId));
+  }, [dispatch, bookId]);
+
+  const filterStudents = assignStudents.filter(student => {
     return student.surname.toLowerCase().includes(searchValue.toLowerCase())
   })
+
+  const assignHandler = (book_id, student_id) => {
+    const payload = {book_id, student_id}
+    dispatch(addBookToStudent(payload))
+  }
+
   return <>
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={show} onHide={handleClose} scrollable={true}>
       <Modal.Header closeButton>
-        <Modal.Title>Modal heading</Modal.Title>
+        <Modal.Title>Add book to students</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div id="assignBlock">
           <div className="input-group p-2">
             <Search
               classes='form-control'
-              placeholder="Enter username or surname"
+              placeholder="Enter user name"
               value={searchValue}
               setValue={setSearchValue}
             />
-            {/* <input type="text" className="form-control" placeholder="Enter username or surname"
-              aria-describedby="button-addon2" id="searchValue" /> */}
-            {/* <Button variant="outline-secondary">Search</Button> */}
           </div>
           <div id="studentsBlock">
             <ul className="list-group" id="bookAssign">
               {filterStudents.map(student =>
-                <li
-                  key={student.id}
-                  className="list-group-item d-flex justify-content-between align-items-center">
-                  Name: {student.surname}
-                  <Button variant="success">Assign</Button>
-                </li>
+                <StudentModalItem key={student.id} student={student} bookId={bookId} assignHandler={assignHandler} />
               )}
             </ul>
           </div>
         </div>
       </Modal.Body>
-      {/* <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-        <Button variant="primary" onClick={handleClose}>
-          Save Changes
-        </Button>
-      </Modal.Footer> */}
     </Modal>
   </>
 }

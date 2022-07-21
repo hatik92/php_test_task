@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Resources\BookResource;
+use App\Http\Responses\ApiResponse;
 use App\Models\Book;
 use App\Models\Student;
 use Carbon\Carbon;
@@ -30,53 +31,60 @@ class BookController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
+
+
     public function store(StoreBookRequest $request)
     {
-
-        if ($request->validated()) {
-
-//            $book_student = DB::select("SELECT * FROM book_student WHERE book_id = '$request->book_id' AND student_id = '$request->student_id'");
+        try {
+            if (!$request->validated()) {
+                return ApiResponse::createValidationResponse([
+                    'response' => ['Incorrect data has been entered!']
+                ]);
+            }
             $book_student = DB::table('book_student')
                 ->where([
-                    ['book_id', '=',  $request->book_id],
-                    ['student_id', '=',  $request->student_id]
+                    ['book_id', '=', $request->book_id],
+                    ['student_id', '=', $request->student_id]
                 ])
                 ->first();
 
-            if (!$book_student) {
-
-                $student = Student::find($request->student_id);
-                $book = Book::find($request->book_id);
-                if ($student && $book) {
-                    $groupByBook = DB::table('book_student')
-                        ->selectRaw('COUNT(*) AS available, book_id')
-                        ->where('book_id', $request->book_id)
-                        ->groupBy('book_id');
-
-                    $available = DB::table('books')
-                        ->leftJoinSub($groupByBook, 'book_student', function ($join) {
-                            $join->on('books.id', '=', 'book_student.book_id');
-                        })->where('book_id', $request->book_id)->first();
-                    $availableBook = 0;
-                    if ($available) {
-                        $availableBook = $available->available;
-                    }
-                    if ($book->count > $availableBook) {
-                        $book->students()->attach($student, ['return_date' => Carbon::now()->addSeconds(config('constants.ONE_DAY_IN_SECONDS') * 10)->format("y-m-d")]);
-                    } else {
-                        return response('This book is not available', Response::HTTP_BAD_REQUEST);
-                    }
-                } else {
-                    return response('Incorrect data has been entered!', Response::HTTP_BAD_REQUEST);
-                }
-                return new BookResource($book);
-            } else {
-                return response('You can\'t take one book more than once!', Response::HTTP_BAD_REQUEST);
+            if ($book_student) {
+                return ApiResponse::__createBadResponse('You can\'t take one book more than once!');
             }
-        } else {
-            return response('Incorrect data has been entered!', Response::HTTP_BAD_REQUEST);
+            $student = Student::find($request->student_id);
+            $book = Book::find($request->book_id);
+            if (!$student || !$book) {
+                return ApiResponse::__createBadResponse('Incorrect data has been entered!');
+            }
+            $groupByBook = DB::table('book_student')
+                ->selectRaw('COUNT(*) AS available, book_id')
+                ->where('book_id', $request->book_id)
+                ->groupBy('book_id');
+
+            $available = DB::table('books')
+                ->leftJoinSub($groupByBook, 'book_student', function ($join) {
+                    $join->on('books.id', '=', 'book_student.book_id');
+                })->where('book_id', $request->book_id)->first();
+
+            $availableBook = 0;
+            if ($available) {
+                $availableBook = $available->available;
+            }
+            if ($book->count == $availableBook || $book->count == 0) {
+                return ApiResponse::createNoPermissionResponse(['This book is not available']);
+            }
+            $book->students()->attach($student, ['return_date' => Carbon::now()->addSeconds(config('constants.ONE_DAY_IN_SECONDS') * 10)->format("y-m-d")]);
+            return ApiResponse::create([
+                'success' => true,
+                'request' => $request->all()
+            ]);
+
+        } catch (\Throwable $err) {
+            return ApiResponse::createServerError($err);
         }
+
     }
+
 
     /**
      * Display the specified resource.

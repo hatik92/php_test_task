@@ -7,6 +7,7 @@ use App\Http\Resources\StudentResource;
 use App\Models\Book;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
@@ -20,21 +21,20 @@ class StudentController extends Controller
     {
         if (!$request->bookId) {
             return StudentResource::collection(Student::all());
-        }
-        else {
-        $students = Student::whereNotIn('id', function ($query) use ($request) {
-//                DB::table('book_student')
-            dd($query->table('book_student'));
-            $query->where('book_id', $request->bookId);
-            })->toSql();
-            dd($students);
+        } else {
+            if (!Book::where('id', $request->bookId)->first()) {
+                return response('Wrong data!', Response::HTTP_BAD_REQUEST);
+            } else {
+                $query = DB::table('book_student')->select('student_id')->where('book_id', $request->bookId);
+                return StudentResource::collection(Student::whereNotIn('id', $query)->get());
+            }
         }
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -45,7 +45,7 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -56,8 +56,8 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -68,7 +68,7 @@ class StudentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

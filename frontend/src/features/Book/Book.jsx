@@ -3,27 +3,22 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { getBook } from './bookSlice';
 import {
-  // useNavigate,
-  // useLocation,
   useParams
 } from "react-router-dom";
 import BookModal from './BookModal/BookModal';
 import { Button } from 'react-bootstrap';
 
 
-const Book = (props) => {
-  // let navigate = useNavigate();
-  // let location = useLocation();
+const Book = () => {
   let { bookId } = useParams();
-  // console.log(navigate, location, bookId);
   const book = useSelector(store => store.book.book)
   const [show, setShow] = useState(false);
-
-  // const [book, setbook] = useState('');
   const dispatch = useDispatch()
+
   useEffect(() => {
     dispatch(getBook(bookId))
-  }, [dispatch]);
+  }, [dispatch, bookId]);
+console.log(book);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return (
@@ -39,7 +34,6 @@ const Book = (props) => {
             <Button variant="primary" onClick={handleShow}>
               + Assign
             </Button>
-            {/* <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="assignBook" data-id="1">+ Assign</button> */}
           </div>
           <div>
             <ul className="list-group" id="bookObout1">
