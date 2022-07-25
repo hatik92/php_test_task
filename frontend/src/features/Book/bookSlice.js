@@ -36,8 +36,15 @@ export const getAssignStudents = createAsyncThunk(
 
 export const addBookToStudent = createAsyncThunk(
   'book/addBookToStudent',
-  async (payload) => {
-    return await books.addBookToStudent(payload.book_id, payload.student_id)
+  async (payload, {rejectWithValue}) => {
+    try {
+      const response = await books.addBookToStudent(payload.book_id, payload.student_id)
+      if (!response.success) throw new Error(response.error)
+      else return response.data
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+    
   }
 )
 
@@ -73,15 +80,14 @@ export const bookSlice = createSlice({
       })
       .addCase(addBookToStudent.fulfilled, (state, action) => {
         const { requestId } = action.meta
-        debugger
         if (
           state.loading === 'pending' &&
           state.currentRequestId === requestId
         ) {
           state.loading = 'idle'
-          const student = state.assignStudents.find(st => st.id === action.payload.student_id)
+          const student = state.assignStudents.find(st => st.id === action.payload.data.request.student_id)
           state.book.students.push(student)
-          state.assignStudents = state.assignStudents.filter(student => student.id !== action.payload.student_id)
+          state.assignStudents = state.assignStudents.filter(student => student.id !== action.payload.data.request.student_id)
           // state.initialized = true
           // state.entities.push(action.payload)
           state.currentRequestId = undefined

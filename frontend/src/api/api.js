@@ -1,12 +1,13 @@
 import axios from 'axios'
-
+const baseURL = process.env.REACT_APP_API_URL
 const apiConfig = axios.create({
-  baseURL: 'http://books-task-api.test/api/',
+  baseURL: 'http://localhost:8000/api/'
   // withCredentials: true,
 })
 
 export const books = {
   getAllBooks() {
+    console.log(baseURL);
     return apiConfig.get('books').then(res => res.data)
   },
   getBookById(id) {
