@@ -11,7 +11,7 @@ const BookItem = ({ book }) => {
         <Link to={'book/' + 1} >{book}</Link>
       </li> */}
 
-      <div className="card mb-3 w-100">
+      <div className="card mb-3 w-100 shadow-none p-3 mb-5 bg-light rounded">
         <div className="row g-0">
           <div className="col-md-4">
             <img src={bookImg} className="img-fluid rounded-start" alt="..." />

@@ -22,8 +22,8 @@ const Books = () => {
   })
 
   return <>
-    <div>
-      <div className='px-2 w-75'>
+    <div className='container shadow p-3 mb-5 bg-white rounded'>
+      <div className='px-2'>
         <ul>
           {filterBooks.length ?
             filterBooks.map((book) =>

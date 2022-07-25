@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import StudentItem from './StudentItem/StudentItem'
+import ListGroup from 'react-bootstrap/ListGroup';
+
 import {
   getStudents,
 } from './studentsSlice'
 import Search from './../Search/Search';
 
-const Student = () => {
+const Students = () => {
 
   const allStudents = useSelector(store => store.students.students)
   const [searchValue, setSearchValue] = useState('');
@@ -19,9 +21,9 @@ const Student = () => {
   const filterStudents = allStudents.filter(student => {
     return student.surname.toLowerCase().includes(searchValue.toLowerCase())
   })
-
+  console.log(filterStudents);
   return <>
-    <div>
+    {/* <div>
       <Search
         value={searchValue}
         setValue={setSearchValue}
@@ -33,8 +35,14 @@ const Student = () => {
           )
         }
       </div>
+    </div> */}
+    <div className='container shadow p-3 mb-5 bg-white rounded'>
+      {filterStudents.map(student => 
+        <StudentItem key={student.id} student={student} />
+      )}
     </div>
+    
   </>
 }
 
-export default Student
+export default Students

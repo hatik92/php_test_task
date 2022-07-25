@@ -16,12 +16,15 @@ const initialState = {
     updated_at: "",
   },
   assignStudents: [],
-  loading: 'idle',
+  loading: false,
+  assignedProcess: [],
+  removeProcess: [],
+  assignedProcessStop: false,
   currentRequestId: undefined,
 }
 
 export const getBook = createAsyncThunk(
-  'book/bookStatus',
+  'book/getBook',
   async (id) => {
     return await books.getBookById(id).then(res => res.data)
   }
@@ -36,77 +39,91 @@ export const getAssignStudents = createAsyncThunk(
 
 export const addBookToStudent = createAsyncThunk(
   'book/addBookToStudent',
-  async (payload, {rejectWithValue}) => {
+  async (payload, { rejectWithValue, dispatch }) => {
     try {
       const response = await books.addBookToStudent(payload.book_id, payload.student_id)
-      if (!response.success) throw new Error(response.error)
-      else return response.data
+      console.log(response);
+      if (!response.success) throw new Error(response.response.data.error)
+      dispatch(booksLeft())
+      return response.data.request
     } catch (error) {
+      console.log(error);
       return rejectWithValue(error)
     }
-    
+
   }
 )
 
-console.log(addBookToStudent());
+export const removeBookToStudent = createAsyncThunk(
+  'book/removeBookToStudent',
+  async (payload, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await books.removeBookToStudent(payload.book_id, payload.student_id)
+      console.log(response);
+      if (!response.success) throw new Error(response.response.data.error)
+      // dispatch(remobeBookToStudent(payload.student_id))
+      return response.data.request
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error)
+    }
+
+  }
+)
+
+// console.log(addBookToStudent());
 
 
 export const bookSlice = createSlice({
   name: 'books',
   initialState,
   reducers: {
-
+    booksLeft(state, action) {
+      state.book.count === state.book.available
+        ? state.assignedProcessStop = true
+        : state.book.available++
+    },
+    remobeBookToStudent(state, action) {
+      state.book.students = state.book.students.filter(st => st.id !== action.payload)
+    }
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getBook.pending, (state) => {
-      })
       .addCase(getBook.fulfilled, (state, action) => {
         state.book = action.payload
-      })
-      .addCase(getAssignStudents.pending, (state) => {
-        // state.initialized = false
+        if (state.book.count === state.book.available) state.assignedProcessStop = true
+
       })
       .addCase(getAssignStudents.fulfilled, (state, action) => {
-        state.assignStudents = action.payload
-        // state.initialized = true
+        const students = action.payload.map(st => { return { ...st, loading: false } })
+        state.assignStudents = students
       })
       .addCase(addBookToStudent.pending, (state, action) => {
-        if (state.loading === 'idle') {
-          state.loading = 'pending'
-          state.currentRequestId = action.meta.requestId
-          // state.initialized = false
-        }
+        state.assignedProcess.push(action.meta.arg?.student_id)
       })
       .addCase(addBookToStudent.fulfilled, (state, action) => {
-        const { requestId } = action.meta
-        if (
-          state.loading === 'pending' &&
-          state.currentRequestId === requestId
-        ) {
-          state.loading = 'idle'
-          const student = state.assignStudents.find(st => st.id === action.payload.data.request.student_id)
-          state.book.students.push(student)
-          state.assignStudents = state.assignStudents.filter(student => student.id !== action.payload.data.request.student_id)
-          // state.initialized = true
-          // state.entities.push(action.payload)
-          state.currentRequestId = undefined
-        }
+        const student = state.assignStudents.find(st => st.id === action.meta.arg?.student_id)
+        state.book.students.push(student)
+        state.assignedProcess.filter(st => st !== student?.id)
+        state.assignStudents = state.assignStudents.filter(student => student.id !== action.meta.arg?.student_id)
       })
       .addCase(addBookToStudent.rejected, (state, action) => {
-        const { requestId } = action.meta
-        if (
-          state.loading === 'pending' &&
-          state.currentRequestId === requestId
-        ) {
-          console.log(action);
-          state.loading = 'idle'
-          state.error = action.error
-          state.currentRequestId = undefined
-        }
+        state.error = action.payload.message
+      })
+      .addCase(removeBookToStudent.pending, (state, action) => {
+        state.removeProcess.push(action.meta.arg?.student_id)
+      })
+      .addCase(removeBookToStudent.fulfilled, (state, action) => {
+        const studentId = action.meta.arg?.student_id
+        state.book.students = state.book.students.filter(st => st.id !== studentId)
+        state.removeProcess.filter(st => st !== studentId)
+      })
+      .addCase(removeBookToStudent.rejected, (state, action) => {
+        state.error = action.payload.message
       })
   }
 })
 
+export const { booksLeft, remobeBookToStudent } = bookSlice.actions
 
 export default bookSlice.reducer

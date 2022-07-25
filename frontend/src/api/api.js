@@ -1,13 +1,12 @@
 import axios from 'axios'
 const baseURL = process.env.REACT_APP_API_URL
 const apiConfig = axios.create({
-  baseURL: 'http://localhost:8000/api/'
+  // baseURL: 'http://localhost:8000/api/'
+  baseURL: baseURL,
   // withCredentials: true,
 })
-
 export const books = {
   getAllBooks() {
-    console.log(baseURL);
     return apiConfig.get('books').then(res => res.data)
   },
   getBookById(id) {
@@ -15,6 +14,11 @@ export const books = {
   },
   addBookToStudent(book_id, student_id) {
     return apiConfig.post('books', {book_id, student_id})
+    .then(res => res.data)
+    .catch(err => err)
+  },
+  removeBookToStudent(book_id, student_id) {
+    return apiConfig.post('books/detach', {book_id, student_id})
     .then(res => res.data)
     .catch(err => err)
   },

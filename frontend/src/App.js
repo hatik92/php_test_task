@@ -8,6 +8,8 @@ import {
 import Book from './features/Book/Book';
 import Books from './features/Books/Books';
 import Navigation from './features/Nav/Nav';
+import Students from './features/Students/Students';
+import Student from './features/Student/Student';
 
 function App() {
   return <>
@@ -25,7 +27,9 @@ function App() {
             } />
             <Route path=":bookId" element={<Book />} />
           </Route>
-          {/* <Route path="book" element={<Book />} /> */}
+          <Route path="students" element={<Students />} >
+            <Route path=":studentId" element={<Student />} />
+          </Route>
           {/* <Route index element={<LeagueStandings />} /> */}
           {/* </Route> */}
         </Route>

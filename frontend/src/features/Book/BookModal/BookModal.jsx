@@ -8,21 +8,21 @@ import { addBookToStudent, getAssignStudents } from '../bookSlice';
 
 const BookModal = ({ show, handleClose, bookId }) => {
   const [searchValue, setSearchValue] = useState('');
-  const assignStudents = useSelector(store => store.book.assignStudents);
+  const { assignStudents, loading, book, assignedProcessStop } = useSelector(store => store.book);
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    dispatch(getAssignStudents(bookId));
-  }, [dispatch, bookId]);
+  // useEffect(() => {
+  //   dispatch(getAssignStudents(bookId));
+  // }, [dispatch, bookId]);
 
   const filterStudents = assignStudents.filter(student => {
     return student.surname.toLowerCase().includes(searchValue.toLowerCase())
   })
 
-  const assignHandler = (book_id, student_id) => {
-    const payload = {book_id, student_id}
-    dispatch(addBookToStudent(payload))
-  }
+  // const assignHandler = (book_id, student_id) => {
+  //   const payload = { book_id, student_id }
+  //   dispatch(addBookToStudent(payload))
+  // }
 
   return <>
     <Modal show={show} onHide={handleClose} scrollable={true}>
@@ -31,6 +31,7 @@ const BookModal = ({ show, handleClose, bookId }) => {
       </Modal.Header>
       <Modal.Body>
         <div id="assignBlock">
+        <h3>Books left {book.count - book.available}</h3>
           <div className="input-group p-2">
             <Search
               classes='form-control'
@@ -42,7 +43,13 @@ const BookModal = ({ show, handleClose, bookId }) => {
           <div id="studentsBlock">
             <ul className="list-group" id="bookAssign">
               {filterStudents.map(student =>
-                <StudentModalItem key={student.id} student={student} bookId={bookId} assignHandler={assignHandler} />
+                <StudentModalItem
+                  key={student.id}
+                  student={student}
+                  assignedProcessStop={assignedProcessStop}
+                  bookId={bookId}
+                  // assignHandler={assignHandler}
+                />
               )}
             </ul>
           </div>

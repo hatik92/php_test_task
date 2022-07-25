@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -14,13 +14,16 @@ const Navigation = () => {
     dispatch(getBooks());
   }, [dispatch]);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   let [searchParams, setSearchParams] = useSearchParams();
-  const searchBookHandler = () => {
-    navigate('/?search='+searchParams.get("search"), { replace: true })
-  }
+  // const searchBookHandler = () => {
+  //   navigate('/?search='+searchParams.get("search"), { replace: true })
+  // }
 
-return <>
+  let location = useLocation()
+  location = location.pathname.split('/')
+
+  return <>
     <Navbar bg="dark" expand="lg" variant="dark" sticky="top">
       <Container fluid>
         <Navbar.Brand href="/">Library</Navbar.Brand>
@@ -31,12 +34,15 @@ return <>
             style={{ maxHeight: '100px' }}
             navbarScroll
           >
-            <Nav.Link href="/">All books</Nav.Link>
-            <Nav.Link href="book">Book</Nav.Link>
+            <Nav.Link href="/">Books</Nav.Link>
+            {/* <Nav.Link href="book">Book</Nav.Link> */}
+            <Nav.Link href="/students">Students</Nav.Link>
             
 
           </Nav>
-          <Form className="d-flex">
+          {
+            location[1] === '' &&
+            <Form className="d-flex">
             <Form.Control
               type="search"
               placeholder="Search book"
@@ -52,8 +58,9 @@ return <>
                 }
               }}
             />
-            <Button variant="outline-success" onClick={searchBookHandler}>Search</Button>
+            {/* <Button variant="outline-success" onClick={searchBookHandler}>Search</Button> */}
           </Form>
+          }
         </Navbar.Collapse>
       </Container>
     </Navbar>

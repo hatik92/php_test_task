@@ -1,11 +1,11 @@
 import React from 'react'
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import { getBook } from './bookSlice';
+// import { getBook } from './bookSlice';
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 
 
-const Book = (props) => {
+const Student = (props) => {
   let navigate = useNavigate();
   let location = useLocation();
   let { bookId } = useParams();
@@ -13,9 +13,9 @@ const Book = (props) => {
   const book = useSelector(store => store.book.book)
   const dispatch = useDispatch()
   console.log(book);
-  useEffect(() => {
-    dispatch(getBook(props.book ? props.book.id : bookId))
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getBook(props.book ? props.book.id : bookId))
+  // }, [dispatch]);
   return (
     <div>
       <div className="container">
@@ -45,4 +45,4 @@ const Book = (props) => {
   )
 }
 
-export default Book
+export default Student
