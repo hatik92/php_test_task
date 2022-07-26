@@ -1,30 +1,33 @@
 import React, { useEffect } from 'react'
-import { Outlet, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { Outlet, useLocation, useSearchParams } from "react-router-dom";
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+// import Button from 'react-bootstrap/Button';
 import { useDispatch } from 'react-redux';
 import { getBooks } from '../Books/booksSlice';
+import { getStudents } from './../Students/studentsSlice';
 
 const Navigation = () => {
+  let location = useLocation()
+  location = location.pathname.split('/')[1]
+  console.log(location);
+
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(getBooks());
-  }, [dispatch]);
+    if (location === 'books') {
+      dispatch(getBooks({current_page:1}));
+    } else if (location === 'students') {
+      dispatch(getStudents());
+    }
+  }, [dispatch, location]);
 
-  // const navigate = useNavigate();
   let [searchParams, setSearchParams] = useSearchParams();
-  // const searchBookHandler = () => {
-  //   navigate('/?search='+searchParams.get("search"), { replace: true })
-  // }
-
-  let location = useLocation()
-  location = location.pathname.split('/')
+  console.log(searchParams.get("page"));
 
   return <>
-    <Navbar bg="dark" expand="lg" variant="dark" sticky="top">
+    <Navbar className='mb-4' bg="dark" expand="lg" variant="dark" sticky="top">
       <Container fluid>
         <Navbar.Brand href="/">Library</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -34,18 +37,15 @@ const Navigation = () => {
             style={{ maxHeight: '100px' }}
             navbarScroll
           >
-            <Nav.Link href="/">Books</Nav.Link>
-            {/* <Nav.Link href="book">Book</Nav.Link> */}
+            <Nav.Link href="/books">Books</Nav.Link>
             <Nav.Link href="/students">Students</Nav.Link>
             
 
           </Nav>
-          {
-            location[1] === '' &&
             <Form className="d-flex">
             <Form.Control
               type="search"
-              placeholder="Search book"
+              placeholder="Search"
               className="me-2"
               aria-label="Search"
               value={searchParams.get("search") || ""}
@@ -60,7 +60,6 @@ const Navigation = () => {
             />
             {/* <Button variant="outline-success" onClick={searchBookHandler}>Search</Button> */}
           </Form>
-          }
         </Navbar.Collapse>
       </Container>
     </Navbar>

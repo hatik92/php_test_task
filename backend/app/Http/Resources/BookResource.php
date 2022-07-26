@@ -22,7 +22,7 @@ class BookResource extends JsonResource
             'year' => $this->year,
             'count' => $this->count,
             'students' => StudentResource::collection($this->students),
-            'avaiable' => $this->students->count()
+            'available' => $this->students->count()
         ];
     }
 }

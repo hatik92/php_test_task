@@ -18,7 +18,7 @@ const BookItem = ({ book }) => {
           </div>
           <div className="col-md-8">
             <div className="card-body">
-              <h5 className="card-title"><Link className={styles.bookLink} to={'book/'+book.id} >{book.title}</Link></h5>
+              <h5 className="card-title"><Link className={styles.bookLink} to={'/book/'+book.id} >{book.title}</Link></h5>
               <p className="card-text">Author: {book.author}</p>
               <p className="card-text"><small className="text-muted">Count: {book.count}</small></p>
             </div>

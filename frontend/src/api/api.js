@@ -6,8 +6,8 @@ const apiConfig = axios.create({
   // withCredentials: true,
 })
 export const books = {
-  getAllBooks() {
-    return apiConfig.get('books').then(res => res.data)
+  getAllBooks(current_page = 1) {
+    return apiConfig.get('books?page=' + current_page).then(res => res.data)
   },
   getBookById(id) {
     return apiConfig.get('books/' + id).then(res => res.data)

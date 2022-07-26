@@ -1,19 +1,19 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { books, students } from "../../api/api";
+import { books } from "../../api/api";
 
 
 const initialState = {
   books: [],
-  assignStudent: '',
-  assignStudents: [],
+  meta: null,
+  links: [],
   initialized: false,
   assignBook: true
 }
 
 export const getBooks = createAsyncThunk(
   'books/getBooks',
-  async () => {
-    return await books.getAllBooks().then(res => res.data)
+  async (payload) => {
+    return await books.getAllBooks(payload.current_page)
   }
 )
 
@@ -42,30 +42,11 @@ export const booksSlice = createSlice({
         state.initialized = false
       })
       .addCase(getBooks.fulfilled, (state, action) => {
-        state.books = action.payload
+        state.books = action.payload.data
+        state.meta = action.payload.meta
+        state.links = action.payload.links
         state.initialized = true
       })
-      // .addCase(getAssignStudents.pending, (state) => {
-      //   state.initialized = false
-      // })
-      // .addCase(getAssignStudents.fulfilled, (state, action) => {
-      //   state.assignStudents = action.payload
-      //   state.initialized = true
-      // })
-      // .addCase(addBookToStudent.pending, (state) => {
-      //   state.initialized = false
-      // })
-      // .addCase(addBookToStudent.fulfilled, (state, action) => {
-      //   // debugger
-      //   const student = state.assignStudents.find(st => st.id === action.payload.student_id)
-      //   const book = state.books.find(book => book.id === action.payload.book_id)
-      //   book.students.push(student)
-      //   // console.log(state);
-      //   // state.books.find(book => book.id === action.payload.book_id).push(student)
-      //   // state.assignStudent = state.assignStudents.find(st => st.id === action.payload.student_id)
-      //   state.assignStudents = state.assignStudents.filter(student => student.id !== action.payload.student_id)
-      //   state.initialized = true
-      // })
   }
 })
 

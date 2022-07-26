@@ -15,7 +15,7 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Resources\Json\AnonymousResourceCollection|Response
      */
     public function index(Request $request)
     {
@@ -25,8 +25,11 @@ class StudentController extends Controller
             if (!Book::where('id', $request->bookId)->first()) {
                 return response('Wrong data!', Response::HTTP_BAD_REQUEST);
             } else {
-                $query = DB::table('book_student')->select('student_id')->where('book_id', $request->bookId);
-                return StudentResource::collection(Student::whereNotIn('id', $query)->get());
+                return Student::whereNotIn('id',
+                    DB::table('book_student')
+                    ->select('student_id')
+                    ->where('book_id', $request->bookId))
+                    ->get();
             }
         }
     }

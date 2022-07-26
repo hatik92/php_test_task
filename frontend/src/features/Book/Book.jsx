@@ -2,16 +2,17 @@ import React from 'react'
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { getAssignStudents, getBook, removeBookToStudent } from './bookSlice';
-import {
-  useParams
-} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import BookModal from './BookModal/BookModal';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Table from 'react-bootstrap/Table';
+import BookStudentItem from './BookStudentItem/BookStudentItem';
 
 
 const Book = () => {
   let { bookId } = useParams();
   const { book, removeProcess } = useSelector(store => store.book)
+  console.log(book);
   const [show, setShow] = useState(false);
   const dispatch = useDispatch()
 
@@ -24,8 +25,8 @@ const Book = () => {
     dispatch(getAssignStudents(bookId));
     setShow(true)
   };
-  const unassignHndler = (book_id, student_id) => {
-    const payload = { book_id, student_id }
+  const unassignHndler = (student_id) => {
+    const payload = { book_id: book.id, student_id }
     dispatch(removeBookToStudent(payload))
   }
   return (
@@ -35,7 +36,7 @@ const Book = () => {
           <h3>Book: {book.title.toUpperCase()}</h3>
           <p>Author: {book.author}</p>
           <p>Year: {book.year}</p>
-          <p>Available count: <span id="availableCount1"> {book.count - book.available}</span></p>
+          <p className={book.count === book.available ? 'text-danger' : 'text-success'}>Available count: <span> {book.count - book.available}</span></p>
           <div className="d-flex justify-content-between">
             <h3>students who took the book</h3>
             <Button variant="primary" onClick={handleShow}>
@@ -43,18 +44,29 @@ const Book = () => {
             </Button>
           </div>
           <div>
-            <ul className="list-group" id="bookObout1">
-              {book.students.map(student =>
-                <li className="list-group-item d-flex justify-content-between align-items-center" key={student.id} >
-                  <span>Name: {student.surname}</span>
-                  <Button
-                    variant="danger"
-                    onClick={() => unassignHndler(book.id, student.id)}
-                    disabled={removeProcess.some(st => st === student.id)}
-                  >Unassign</Button>
-                </li>
-              )}
-            </ul>
+            <Table striped>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Username</th>
+                  <th>Return date</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {book.students.map((student, i) =>
+                  <BookStudentItem
+                    key={student.id}
+                    student={student}
+                    unassignHndler={unassignHndler}
+                    removeProcess={removeProcess}
+                    index={i}
+                  />
+                )}
+              </tbody>
+            </Table>
           </div>
         </div>
       </div>

@@ -16,9 +16,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigation />}>
-          <Route index element={<Books />} />
-          {/* <Route path="book" element={<Book />}> */}
-          {/* <Route path=":teamId" element={<Team />} /> */}
+          <Route path="books" element={<Books />} >
+            <Route index element={<Books />} />
+            <Route path=":page" element={<Books />} />
+          </Route>
           <Route path="book">
             <Route index element={
               <main style={{ padding: "1rem" }}>

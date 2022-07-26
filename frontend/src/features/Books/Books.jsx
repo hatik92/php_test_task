@@ -1,39 +1,31 @@
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
+import NotFound from '../../404notFound/NotFound'
+import BootstrapPagination from '../../Pagination/Pagination'
 import BookItem from './BookItem/BookItem'
-import {
-  getBooks,
-} from './booksSlice'
+import { getBooks } from './booksSlice';
+import { useParams } from 'react-router-dom';
 
 const Books = () => {
   let searchParams = useSearchParams()[0];
+  const { page } = useParams();
+  const { books: allBooks, meta, links } = useSelector(store => store.books)
 
-  const allBooks = useSelector(store => store.books.books)
-  const dispatch = useDispatch()
-
-  // useEffect(() => {
-  //   dispatch(getBooks());
-  // }, [dispatch]);
-
-  const searchValue = searchParams.get("search")? searchParams.get("search"): ''
+  const searchValue = searchParams.get("search") ? searchParams.get("search") : ''
   const filterBooks = allBooks.filter(book => {
     return (book.title.toLowerCase().includes(searchValue.toLowerCase()) || book.author.toLowerCase().includes(searchValue.toLowerCase()))
   })
 
   return <>
-    <div className='container shadow p-3 mb-5 bg-white rounded'>
-      <div className='px-2'>
-        <ul>
-          {filterBooks.length ?
-            filterBooks.map((book) =>
-              <BookItem key={book.id} book={book} />
-            ) :
-            <h1>not found</h1>
-          }
-        </ul>
-      </div>
-    </div>
+    {filterBooks.length ?
+      (<div className='container shadow p-3 mb-5 bg-white rounded'>
+        <div className='px-2'>
+          {filterBooks.map((book) =>
+            <BookItem key={book.id} book={book} />)}
+        </div>
+        <BootstrapPagination pagination={meta} links={links} getData={getBooks} current_page={page} />
+      </div>)
+      : <NotFound param='Book' />}
   </>
 }
 

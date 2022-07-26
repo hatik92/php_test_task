@@ -22,7 +22,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        return BookResource::collection(Book::all());
+        return BookResource::collection(Book::paginate(2));
     }
 
     /**
@@ -75,8 +75,7 @@ class BookController extends Controller
             }
             $book->students()->attach($student, ['return_date' => Carbon::now()->addSeconds(config('constants.ONE_DAY_IN_SECONDS') * 10)->format("y-m-d")]);
             return ApiResponse::create([
-                'success' => true,
-                'request' => $request->all()
+                'success' => true
             ]);
 
         } catch (\Throwable $err) {
@@ -94,7 +93,8 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        return new BookResource(Book::with('students')->findOrFail($id));
+//        dd(Book::with('students')->findOrFail($id)->toSql());
+        return Book::with('students')->findOrFail($id);
     }
 
     /**
@@ -123,12 +123,21 @@ class BookController extends Controller
 
     public function detachBook(StoreBookRequest $request)
     {
-        if ($request->validated()) {
+        try {
+            if (!$request->validated()) {
+                return ApiResponse::createValidationResponse([
+                    'response' => ['Incorrect data has been entered!']
+                ]);
+            }
             $student = Student::find($request->student_id);
             $book = Book::find($request->book_id);
             $book->students()->detach($student);
+            return ApiResponse::create([
+                'success' => true
+            ]);
+        } catch (\Throwable $err) {
+            return ApiResponse::createServerError($err);
         }
 
-        return response(null, Response::HTTP_NO_CONTENT);
     }
 }
