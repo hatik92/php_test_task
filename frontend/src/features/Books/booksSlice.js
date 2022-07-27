@@ -13,24 +13,9 @@ const initialState = {
 export const getBooks = createAsyncThunk(
   'books/getBooks',
   async (payload) => {
-    return await books.getAllBooks(payload.current_page)
+    return await books.getAllBooks(payload.current_page, payload.search)
   }
 )
-
-// export const getAssignStudents = createAsyncThunk(
-//   'books/getAssignStudents',
-//   async (bookId) => {
-//     return await students.getAllStudents(bookId).then(res => res.data)
-//   }
-// )
-
-// export const addBookToStudent = createAsyncThunk(
-//   'books/addBookToStudent',
-//   async (payload) => {
-//     return await books.addBookToStudent(payload.book_id, payload.student_id)
-//   }
-// )
-
 
 export const booksSlice = createSlice({
   name: 'books',

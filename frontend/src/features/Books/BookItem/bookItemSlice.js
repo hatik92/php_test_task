@@ -1,7 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { books } from "../../../api/api";
-// import { Categoty } from "../Sidebar/SidebarSlice";
-
 
 const initialState = {
   books: [],
@@ -15,13 +13,10 @@ export const getBooks = createAsyncThunk(
   }
 )
 
-
 export const gallerySlice = createSlice({
   name: 'books',
   initialState,
-  reducers: {
-    
-  },
+  reducers: { },
   extraReducers: (builder) => {
     builder
       .addCase(getBooks.pending, (state) => {

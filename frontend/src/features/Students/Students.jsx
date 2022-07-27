@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
 import StudentItem from './StudentItem/StudentItem'
 import { useSearchParams } from 'react-router-dom';
-import NotFound from './../../404notFound/NotFound';
+import NotFound from '../../Common/404notFound/NotFound';
 
 const Students = () => {
 
@@ -14,7 +14,7 @@ const Students = () => {
 
   return <>
     {filterStudents.length ?
-      (<div className='container shadow p-3 mb-5 bg-white rounded'>
+      (<div className='container shadow p-3 mb-3 bg-white rounded'>
       {filterStudents.map(student => 
         <StudentItem key={student.id} student={student} />
       )}

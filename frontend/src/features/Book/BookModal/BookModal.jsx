@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Modal from 'react-bootstrap/Modal';
-import Search from '../../Search/Search';
+import Search from '../../../Common/Search/Search';
 import { useSelector } from 'react-redux';
 import StudentModalItem from './StudentModalItem/StudentModalItem';
 

@@ -4,7 +4,7 @@ import style from './notFound.module.css'
 const NotFound = ({param}) => {
   
   return <>
-    <div className={style.container}>
+    {/* <div className={style.container}>
       <h1 className={style.first_four}>4</h1>
       <div className={style.cog_wheel1}>
         <div className={style.cog1}>
@@ -32,8 +32,8 @@ const NotFound = ({param}) => {
         </div>
       </div>
       <h1 className={style.second_four}>4</h1>
+    </div> */}
       <p className={style.wrong_para}>Uh Oh! {param} not found!</p>
-    </div>
   </>
 }
 

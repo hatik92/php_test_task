@@ -20,9 +20,14 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return BookResource::collection(Book::paginate(2));
+        if ($request->search && $request->search != '') {
+            $search = $request->search;
+            return BookResource::collection(Book::where('title', 'LIKE', "%{$search}%")
+                ->orWhere('author', 'LIKE', "%{$search}%")->paginate(5));
+        }
+        return BookResource::collection(Book::paginate(5));
     }
 
     /**

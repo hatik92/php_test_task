@@ -2,7 +2,7 @@ import userImg from '../../../images/user.png'
 const StudentItem = ({ student }) => {
 
   return <>
-    <div className="d-flex m-2 shadow-sm p-3 mb-5 bg-white rounded">
+    <div className="d-flex m-2 shadow-sm p-3 bg-white rounded">
       <div className='imgBlock'><img src={userImg} /></div>
       <div className='info mx-4'>
         <h2>Name: {student.first_name}</h2>
