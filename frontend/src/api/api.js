@@ -1,13 +1,38 @@
 import axios from 'axios'
 const baseURL = process.env.REACT_APP_API_URL
-export const apiConfig = axios.create({
+const apiConfig = axios.create({
   baseURL: baseURL,
+  withCredentials: true,
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
   },
-  withCredentials: true,
-  // withCredentials: true,
 })
+
+export const getUser = {
+  csrf() {
+    return apiConfig.get('sanctum/csrf-cookie')
+    .catch(err => err)
+  },
+
+  login(email, password) {
+    // debugger
+    // return apiConfig.post('api/login', {email, password}).then(res => res).catch(error => error)
+    return apiConfig.get('sanctum/csrf-cookie')
+    .then(res => {
+      // if (res.status === 204) {?
+        apiConfig.post('api/login', {email, password}).then(res => res).catch(error => error)
+      // }
+    }).catch(err => err)
+  },
+
+  logout() {
+    return apiConfig.post('api/logout')
+  },
+
+  user() {
+    return apiConfig.get('api/user')
+  }
+}
 export const books = {
   getAllBooks(current_page = 1, search = '') {
     return apiConfig.get('api/books?page=' + current_page + '&search=' + search).then(res => res.data)

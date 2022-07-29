@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Outlet, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -81,7 +81,9 @@ const Navigation = () => {
             />
             {/* <Button variant="outline-success" type='submit'>Search</Button> */}
           </Form>
-          <Button variant="outline-success">LogIn</Button>
+          <Button variant="outline-success">
+            <Link to='/login' >LogIn</Link>
+          </Button>
         </Navbar.Collapse>
       </Container>
     </Navbar>
