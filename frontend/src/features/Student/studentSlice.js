@@ -4,42 +4,32 @@ import { books } from "../../api/api";
 
 
 const initialState = {
-  book: {
-    id: null,
-    title: "",
-    author: "",
-    year: "",
-    count: null,
-    available: null,
-    students: [],
-    created_at: "",
-    updated_at: "",
-  }
+  student: {}
 }
 
-export const getBook = createAsyncThunk(
+export const getStudent = createAsyncThunk(
   'student/studentStatus',
   async (id) => {
-    return await books.getBookById(id).then(res => res.data)
+    return await books.getStudentById(id).then(res => res.data)
   }
 )
 
 
-export const bookSlice = createSlice({
-  name: 'books',
+export const studentSlice = createSlice({
+  name: 'student',
   initialState,
   reducers: {
 
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getBook.pending, (state) => {
+      .addCase(getStudent.pending, (state) => {
       })
-      .addCase(getBook.fulfilled, (state, action) => {
-        state.book = action.payload
+      .addCase(getStudent.fulfilled, (state, action) => {
+        state.student = action.payload
       })
   }
 })
 
 
-export default bookSlice.reducer
+export default studentSlice.reducer

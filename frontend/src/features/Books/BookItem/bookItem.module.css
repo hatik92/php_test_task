@@ -7,3 +7,7 @@
 .bookLink:hover {
   color: black;
 }
+
+.bookBlock {
+  background-color: rgb(255 255 255 / 50%) !important;
+}

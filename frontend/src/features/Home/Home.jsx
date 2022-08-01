@@ -1,10 +1,11 @@
 import React from 'react'
-import Navigation from './../Nav/Nav';
+import style from './home.module.css'
 
 const Home = () => {
   return <>
-    <Navigation />
-    <div>HomePage</div>
+    <div className='container shadow p-3 my-5 rounded h-75 text-center'>
+      <h1>{('welcome to our library').toUpperCase()}</h1>
+    </div>
   </>
 }
 

@@ -5,9 +5,11 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getBooks } from '../Books/booksSlice';
 import { getStudents } from './../Students/studentsSlice';
+import { logout, getCurrentUser } from './../Login/loginSlice';
+import style from './nav.module.scss'
 
 const Navigation = () => {
   const dispatch = useDispatch()
@@ -15,11 +17,15 @@ const Navigation = () => {
   const navigate = useNavigate();
   const params = useParams();
   let [searchParams, setSearchParams] = useSearchParams();
-
+  const { isAuth, user } = useSelector(store => store.login)
   const locationPathName = location.pathname.split('/')[1]
   const searchValue = searchParams.get('search')
   const currentPage = params.page
-
+  useEffect(() => {
+    if (!isAuth) {
+      return navigate("/");
+    } 
+  }, [isAuth]);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -51,10 +57,14 @@ const Navigation = () => {
     }
   }
 
+  const logoutHandler = () => {
+    dispatch(logout())
+  }
+
   return <>
-    <Navbar className='mb-4' bg="dark" expand="lg" variant="dark" sticky="top">
+    <Navbar bg="dark" expand="lg" variant="dark" sticky="top">
       <Container fluid>
-        <Navbar.Brand href="/">Library</Navbar.Brand>
+        <Link className="navbar-brand" to="/">Library</Link>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
@@ -62,11 +72,14 @@ const Navigation = () => {
             style={{ maxHeight: '100px' }}
             navbarScroll
           >
-            <Nav.Link href="/books">Books</Nav.Link>
-            <Nav.Link href="/students">Students</Nav.Link>
+            {isAuth?<>
+              <Link className='nav-link' to="/books">Books</Link>
+            <Link className='nav-link' to="/students">Students</Link>
+            </>:''}
 
 
           </Nav>
+          {isAuth?<>
           <Form
             className="d-flex"
             onSubmit={e => e.preventDefault()}
@@ -79,10 +92,12 @@ const Navigation = () => {
               value={searchParams.get("search") || ""}
               onChange={(event) => onSearchChangeHandler(event)}
             />
-            {/* <Button variant="outline-success" type='submit'>Search</Button> */}
           </Form>
-          <Button variant="outline-success">
-            <Link to='/login' >LogIn</Link>
+          <span className='text-success m-2'>{user.name}</span>
+          </>
+          :''}
+          <Button className={style.linka} variant="outline-success">
+            {!isAuth ? <Link to='/login' >LogIn</Link> : <Link to='/login' onClick={logoutHandler}>Logout</Link>}
           </Button>
         </Navbar.Collapse>
       </Container>

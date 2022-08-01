@@ -1,0 +1,11 @@
+.linka a{
+  color: #198754;
+  text-decoration: none;
+
+  &:focus, &:hover, &:link, &:active {
+    text-decoration: none;
+  }
+}
+.linka:hover a {
+  color:aliceblue;
+}

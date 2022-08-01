@@ -7,6 +7,7 @@ import BookModal from './BookModal/BookModal';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import BookStudentItem from './BookStudentItem/BookStudentItem';
+import NotFound from '../../Common/404notFound/NotFound';
 
 
 const Book = () => {
@@ -29,10 +30,11 @@ const Book = () => {
     const payload = { book_id: book.id, student_id }
     dispatch(removeBookToStudent(payload))
   }
-  return (
-    <div>
-      <div className="container">
-        <div id="bookView">
+  return <>
+     
+      <div>
+      {book.id ?<div className="container bg-light">
+        <div>
           <h3>Book: {book.title.toUpperCase()}</h3>
           <p>Author: {book.author}</p>
           <p>Year: {book.year}</p>
@@ -69,14 +71,18 @@ const Book = () => {
             </Table>
           </div>
         </div>
-      </div>
+      </div>:
+      <div className='container'>
+    <NotFound param='book' />
+      </div> }
       <BookModal
         handleClose={handleClose}
         show={show}
         bookId={bookId}
       />
     </div>
-  )
+    
+  </>
 }
 
 export default Book

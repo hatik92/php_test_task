@@ -13,7 +13,7 @@ const initialState = {
 export const getBooks = createAsyncThunk(
   'books/getBooks',
   async (payload) => {
-    return await books.getAllBooks(payload.current_page, payload.search)
+    return await books.getAllBooks(payload?.current_page, payload?.search)
   }
 )
 

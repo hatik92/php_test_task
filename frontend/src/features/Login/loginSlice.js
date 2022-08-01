@@ -3,30 +3,17 @@ import { getUser } from './../../api/api';
 
 
 const initialState = {
+  initializad: false,
   isAuth: false,
   csrfConfig: {},
   csrfConfigError: '',
-  user: '',
+  user: {},
   loginData: {
     email:'',
     password:''
   },
   error: ''
-
 }
-
-// export const csrf = createAsyncThunk(
-//   'login/getCSRF',
-//   async (payload, {rejectWithValue}) => {
-//     try {
-//       const response = await getUser.csrf().then(res => console.log(res))
-//       if (response.status !== 204) throw new Error(response.response.data.error)
-//       return response
-//     } catch (error) {
-//       return rejectWithValue(error)
-//     }
-//   }
-// )
 
 export const login = createAsyncThunk(
   'login/isLogin',
@@ -35,12 +22,41 @@ export const login = createAsyncThunk(
     try {
       const response = await getUser.login(payload.email, payload.password)
       if (response.status !== 200) throw new Error(response.response.data.error)
-      return response.data.request
+      return response.data
     } catch (error) {
       return rejectWithValue(error)
     } 
   }
 )
+
+export const getCurrentUser = createAsyncThunk(
+  'login/getUser',
+  async(payload, {rejectWithValue}) => {
+    try {
+      const res = await getUser.getUser()
+      
+      if (res.status !== 200) throw new Error(res.response.data.error)
+      return res.data
+    } catch (error) {
+      return rejectWithValue(error.response)
+    }
+  }
+)
+
+export const logout = createAsyncThunk(
+  'login/logout',
+
+  async (payload, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await getUser.logout()
+      if (response.status !== 200) throw new Error(response.response.data.error)
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error)
+    } 
+  }
+)
+
 
 export const loginSlice = createSlice({
   name: 'login',
@@ -48,24 +64,36 @@ export const loginSlice = createSlice({
   reducers: { },
   extraReducers: (builder) => {
     builder
-      // .addCase(csrf.pending, (state, action) => {
-      //   // state.csrfConfig = action.payload
-      // })
-      // .addCase(csrf.fulfilled, (state, action) => {
-      //   state.csrfConfig = action.payload
-      // })
-      // .addCase(csrf.rejected, (state, action) => {
-      //   // state.csrfConfigError = action.payload
-      // })
       .addCase(login.pending, (state) => {
         state.isAuth = false
       })
       .addCase(login.fulfilled, (state, action) => {
-        
+        state.user = action.payload
+        state.isAuth = true
       })
       .addCase(login.rejected, (state, action) => {
-        // state.error = 
-        console.log(action);
+      })
+
+      .addCase(logout.pending, (state) => {
+        state.isAuth = false
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        state.isAuth = false
+      })
+      .addCase(logout.rejected, (state, action) => {
+      })
+      
+      .addCase(getCurrentUser.pending, (state) => {
+        state.isAuth = false
+      })
+      .addCase(getCurrentUser.fulfilled, (state, action) => {
+        state.user = action.payload
+        state.isAuth = true
+        state.initializad = true
+      })
+      .addCase(getCurrentUser.rejected, (state, action) => {
+        state.initializad = true
+        state.error = action.payload
       })
   }
 })

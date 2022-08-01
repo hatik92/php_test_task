@@ -1,22 +1,27 @@
 import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {  login } from './loginSlice';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [loginData, setloginData] = useState({ email: '', password: '' });
   const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   dispatch(csrf())
-  // }, [dispatch]);
+  const navigate = useNavigate()
+  const {isAuth} = useSelector(store => store.login)
+  
+  useEffect(() => {
+    if (isAuth) {
+      return navigate('/')
+    }
+  }, [isAuth]);
 
   const onSubmitHandler = (e) => {
     e.preventDefault()
     dispatch(login(loginData))
-    console.log(loginData);
   }
+  
   return <>
     <div className='container d-flex justify-content-center'>
       <Form className='w-50' onSubmit={e => onSubmitHandler(e)}>
@@ -42,9 +47,6 @@ const Login = () => {
             placeholder="Password"
           />
         </Form.Group>
-        {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <Form.Check type="checkbox" label="Check me out" />
-      </Form.Group> */}
         <Button variant="primary" type="submit">
           Submit
         </Button>

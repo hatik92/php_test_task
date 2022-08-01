@@ -4,9 +4,9 @@ import styles from './bookItem.module.css'
 import bookImg from '../../../images/book.jpg';
 
 const BookItem = ({ book }) => {
-
+  
   return <>
-    <div className="card mb-3 w-100 shadow-none p-3 bg-light rounded">
+    <div className={'card mb-3 w-100 shadow-none p-3 rounded ' + styles.bookBlock}>
       <div className="row g-0">
         <div className="col-md-4">
           <img src={bookImg} className="img-fluid rounded-start" alt="..." />

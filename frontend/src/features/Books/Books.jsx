@@ -1,20 +1,22 @@
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import BootstrapPagination from '../../Common/Pagination/Pagination'
 import BookItem from './BookItem/BookItem'
 import { getBooks } from './booksSlice';
 import { useParams } from 'react-router-dom';
 import Skeleton from './../../Common/Skeleton/Skeleton';
+import { useEffect } from 'react';
 
 const Books = () => {
   const { page } = useParams();
   const { initialized, books: allBooks, meta, links } = useSelector(store => store.books)
-  // const filterBooks = allBooks.filter(book => {
-  //   return (book.title.toLowerCase().includes(searchValue.toLowerCase()) || book.author.toLowerCase().includes(searchValue.toLowerCase()))
-  // })
+  const dispatch = useDispatch()
+  
+  useEffect(() => {
+    dispatch(getBooks());
+  }, [dispatch]);
   
   return <>
-
-    <div className='container shadow p-3 mb-3 bg-white rounded'>
+    <div className='container shadow p-3 mb-3 rounded'>
       {initialized
         ? allBooks.length
           ? <>

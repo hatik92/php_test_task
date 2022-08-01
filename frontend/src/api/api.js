@@ -7,21 +7,14 @@ const apiConfig = axios.create({
     'X-Requested-With': 'XMLHttpRequest',
   },
 })
-
 export const getUser = {
-  csrf() {
-    return apiConfig.get('sanctum/csrf-cookie')
-    .catch(err => err)
-  },
-
   login(email, password) {
-    // debugger
-    // return apiConfig.post('api/login', {email, password}).then(res => res).catch(error => error)
     return apiConfig.get('sanctum/csrf-cookie')
     .then(res => {
-      // if (res.status === 204) {?
-        apiConfig.post('api/login', {email, password}).then(res => res).catch(error => error)
-      // }
+      if (res.status === 204) {
+        return apiConfig.post('api/login', {email, password})
+        .then(res => res).catch(error => error)
+      }
     }).catch(err => err)
   },
 
@@ -29,7 +22,7 @@ export const getUser = {
     return apiConfig.post('api/logout')
   },
 
-  user() {
+  getUser() {
     return apiConfig.get('api/user')
   }
 }
@@ -55,5 +48,8 @@ export const books = {
 export const students = {
   getAllStudents(bookId = null) {
     return apiConfig.get('api/students', {params:{bookId}}).then(res => res.data)
+  },
+  getStudentById(id) {
+    return apiConfig.get('api/students/' + id).then(res => res.data)
   }
 }

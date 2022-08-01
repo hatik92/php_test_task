@@ -1,8 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { books, students } from "../../api/api";
 import { formatDate } from "../../helpers/helpers";
-// import { Categoty } from "../Sidebar/SidebarSlice";
-
 
 const initialState = {
   book: {
@@ -35,7 +33,6 @@ export const getAssignStudents = createAsyncThunk(
   'book/getAssignStudents',
   async (bookId) => {
     return await students.getAllStudents(bookId)
-    // .then(res => res.data)
   }
 )
 
@@ -69,7 +66,6 @@ export const removeBookToStudent = createAsyncThunk(
   }
 )
 
-// console.log(addBookToStudent());
 
 
 export const bookSlice = createSlice({
@@ -124,7 +120,6 @@ export const bookSlice = createSlice({
       })
       .addCase(removeBookToStudent.fulfilled, (state, action) => {
         const studentId = action.meta.arg?.student_id
-        // state.book.students = state.book.students.filter(st => st.id !== studentId)
         state.removeProcess = state.removeProcess.filter(st => st !== studentId)
       })
       .addCase(removeBookToStudent.rejected, (state, action) => {
