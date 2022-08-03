@@ -8,12 +8,12 @@ import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import BookStudentItem from './BookStudentItem/BookStudentItem';
 import NotFound from '../../Common/404notFound/NotFound';
+import BookLoader from '../../Common/Loader/BookLoader';
 
 
 const Book = () => {
   let { bookId } = useParams();
-  const { book, removeProcess } = useSelector(store => store.book)
-  console.log(book);
+  const { book, removeProcess, loading } = useSelector(store => store.book)
   const [show, setShow] = useState(false);
   const dispatch = useDispatch()
 
@@ -30,10 +30,12 @@ const Book = () => {
     const payload = { book_id: book.id, student_id }
     dispatch(removeBookToStudent(payload))
   }
+  if (!loading) {
+    return <BookLoader />
+  }
   return <>
-     
-      <div>
-      {book.id ?<div className="container bg-light">
+    <div>
+      {book.id ? <div className="container bg-light">
         <div>
           <h3>Book: {book.title.toUpperCase()}</h3>
           <p>Author: {book.author}</p>
@@ -71,17 +73,16 @@ const Book = () => {
             </Table>
           </div>
         </div>
-      </div>:
-      <div className='container'>
-    <NotFound param='book' />
-      </div> }
+      </div> :
+        <div className='container'>
+          <NotFound param='book' />
+        </div>}
       <BookModal
         handleClose={handleClose}
         show={show}
         bookId={bookId}
       />
     </div>
-    
   </>
 }
 

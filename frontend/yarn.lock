@@ -7441,6 +7441,13 @@ react-router@6.3.0:
   dependencies:
     history "^5.2.0"
 
+react-sanctum@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-sanctum/-/react-sanctum-2.2.0.tgz#1bfc2e0f4a263f8b4e3ed9301b4096f6f2b46b40"
+  integrity sha512-nprToWuFODNmM7Vzg0bdneWZOXOGd8F5OfNroZ10aqpdNytXji8Z/KRBV+5zkkmtlHEKyq4Qag9ULkdoPze5nA==
+  dependencies:
+    axios "^0.27.2"
+
 react-scripts@5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-5.0.1.tgz#6285dbd65a8ba6e49ca8d651ce30645a6d980003"

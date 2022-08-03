@@ -3,7 +3,6 @@
 
 // export const useAuth = (props) => {
 //     // let navigate = useNavigate();
-//     // console.log(navigate);
 //     const csrf = () => axios.get('/sanctum/csrf-cookie')
 
 //     const login = async ({ setErrors, setSuccessResponse }) => {

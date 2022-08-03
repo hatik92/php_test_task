@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { books } from "../../api/api";
+// import {getAtuh} from "../../appSlice"
 
 
 const initialState = {
@@ -7,13 +8,21 @@ const initialState = {
   meta: null,
   links: [],
   initialized: false,
-  assignBook: true
+  assignBook: true,
+  error: null
 }
 
 export const getBooks = createAsyncThunk(
   'books/getBooks',
-  async (payload) => {
-    return await books.getAllBooks(payload?.current_page, payload?.search)
+  async (payload,{rejectWithValue, dispatch, getState}) => {
+    try {
+      // debugger
+      const response = await books.getAllBooks(payload?.current_page, payload?.search)
+      if (response.statusText !== 'OK') throw new Error(response.response.data.error)
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.response)
+    }
   }
 )
 
@@ -31,6 +40,9 @@ export const booksSlice = createSlice({
         state.meta = action.payload.meta
         state.links = action.payload.links
         state.initialized = true
+      })
+      .addCase(getBooks.rejected, (state, action) => {
+        state.error = action.payload
       })
   }
 })

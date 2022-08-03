@@ -15,11 +15,13 @@ const initialState = {
     updated_at: "",
   },
   assignStudents: [],
+  assignStudentsLoading: false,
   loading: false,
   assignedProcess: [],
   removeProcess: [],
   assignedProcessStop: false,
   currentRequestId: undefined,
+  error: null
 }
 
 export const getBook = createAsyncThunk(
@@ -82,7 +84,6 @@ export const bookSlice = createSlice({
       state.book.available++
     },
     remobeBookToStudent(state, action) {
-      console.log(action);
       state.assignedProcessStop = false
       state.book.students = state.book.students.filter(st => st.id !== action.payload)
       state.book.available--
@@ -90,15 +91,28 @@ export const bookSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(getBook.pending, (state, action) => {
+        state.loading = false
+        state.book.available = state.book.students.length
+        if (state.book.count === state.book.available) state.assignedProcessStop = true
+      })
       .addCase(getBook.fulfilled, (state, action) => {
         state.book = action.payload
         state.book.available = state.book.students.length
         if (state.book.count === state.book.available) state.assignedProcessStop = true
-
+        state.loading = true
+      })
+      .addCase(getBook.rejected, (state, action) => {
+        state.loading = true
+        // debugger
+      })
+      .addCase(getAssignStudents.pending, (state, action) => {
+        state.assignStudentsLoading = false
       })
       .addCase(getAssignStudents.fulfilled, (state, action) => {
         const students = action.payload.map(st => { return { ...st, loading: false } })
         state.assignStudents = students
+        state.assignStudentsLoading = true
       })
       .addCase(addBookToStudent.pending, (state, action) => {
         state.assignedProcessStop = true

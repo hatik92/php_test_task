@@ -4,10 +4,11 @@ import { useSearchParams } from 'react-router-dom';
 import NotFound from '../../Common/404notFound/NotFound';
 import { getStudents } from './studentsSlice';
 import { useEffect } from 'react';
+import BookLoader from '../../Common/Loader/BookLoader';
 
 const Students = () => {
 
-  const {students: allStudents} = useSelector(store => store.students)
+  const {students: allStudents, initialized} = useSelector(store => store.students)
   let searchParams = useSearchParams()[0];
   const dispatch = useDispatch();
 
@@ -18,7 +19,9 @@ const Students = () => {
   const filterStudents = allStudents.filter(student => {
     return (student.surname.toLowerCase().includes(searchValue.toLowerCase()) || student.first_name.toLowerCase().includes(searchValue.toLowerCase()))
   })
-
+  if (!initialized) {
+    return <BookLoader />
+  }
   return <>
     {filterStudents.length ?
       (<div className='container shadow p-3 mb-3 rounded'>

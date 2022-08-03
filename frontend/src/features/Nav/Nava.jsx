@@ -10,31 +10,34 @@ import {
   // getUser,
   // logout
 } from '../Login/loginSlice';
-import { useSanctum } from "react-sanctum";
-import { getUser } from '../../appSlice';
+// import { useSanctum } from "react-sanctum";
 // import style from './nav.module.scss'
+import { withSanctum } from "react-sanctum";
+import { getUser } from '../../appSlice';
 
-const Navigation = () => {
-  const { authenticated, user, signIn, signOut, checkAuthentication } = useSanctum();
+const Navigation = ({ authenticated, user, signIn, checkAuthentication }) => {
+  // const { authenticated, user, signIn } = useSanctum();
+  // const lalala = async () => {
+  //   return await checkAuthentication()
+  // } 
+  // checkAuthentication();
   const dispatch = useDispatch()
   const navigate = useNavigate();
   let location = useLocation();
   let [searchParams, setSearchParams] = useSearchParams();
   // const { isAuth, user } = useSelector(store => store.login)
-  useEffect(() => {
-    console.log(user);
-  //   checkAuthentication()
-    if (user) {
+  // useEffect(() => {
+    // if (!authenticated && location.pathname !== '/login') {
       dispatch(getUser(user))
     //   // debugger
-      // navigate("/login");
+    //   return navigate("/login");
     // } 
     // else {
     //   debugger
     //   dispatch(getUser(user))
     //   // return navigate("/");
-    }
-  },[dispatch, user])
+    // }
+  // },[authenticated])
     
     
   //   dispatch(getCurrentUser())
@@ -53,9 +56,9 @@ const Navigation = () => {
     }
   }
 
-  const logoutHandler = () => {
-    signOut()
-  }
+  // const logoutHandler = () => {
+  //   dispatch(logout())
+  // }
 
   return <>
     <Navbar bg="dark" expand="lg" variant="dark" sticky="top">
@@ -93,7 +96,7 @@ const Navigation = () => {
           {!authenticated
             ? <Link className='btn btn-outline-success' to='/login' >LogIn</Link>
             : <Link className='btn btn-outline-success' to='/login'
-            onClick={logoutHandler}
+            // onClick={logoutHandler}
             >Logout</Link>
           }
         </Navbar.Collapse>
@@ -103,4 +106,4 @@ const Navigation = () => {
   </>
 }
 
-export default Navigation
+export default withSanctum(Navigation)

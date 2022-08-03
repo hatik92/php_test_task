@@ -23,7 +23,6 @@ export const gallerySlice = createSlice({
         state.initialized = false
       })
       .addCase(getBooks.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.books = action.payload
         state.initialized = true
       })

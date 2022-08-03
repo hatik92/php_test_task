@@ -24,7 +24,7 @@ class LoginController extends Controller
             ]);
         }
 
-        return $request->user();
+        return Auth::user();
     }
 
     public function logout()
