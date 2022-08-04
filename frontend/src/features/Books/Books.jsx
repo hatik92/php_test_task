@@ -11,14 +11,13 @@ import { useLocation } from 'react-router-dom';
 
 const Books = () => {
   const { page } = useParams();
-  const { initialized, books: allBooks, meta, links, error } = useSelector(store => store.books);
+  const { initialized, books: allBooks, meta, links } = useSelector(store => store.books);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  let [searchParams, setSearchParams] = useSearchParams();
+  let searchParams = useSearchParams()[0];
   let searchValue = searchParams.get('search');
 
-  
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       if (searchValue) {
@@ -31,12 +30,8 @@ const Books = () => {
         dispatch(getBooks({ current_page: page }));
     }
     return () => clearTimeout(delayDebounceFn)
-    // dispatch(getBooks());
   }, [dispatch, searchValue]);
-  // if(error) {
-  //   navigate('/404', { replace: true })
-  //   navigate(0);
-  // }
+  
   return <>
     <div className='container shadow p-3 mb-3 rounded'>
       {initialized

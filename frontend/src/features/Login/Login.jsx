@@ -1,59 +1,74 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { useDispatch, useSelector } from 'react-redux';
-// import {  login } from './loginSlice';
+import { useDispatch } from 'react-redux';
+import style from './login.module.css';
 import { useNavigate } from 'react-router-dom';
-import AuthContext from '../../Common/Context/AuthProvider';
 import { useSanctum } from "react-sanctum";
-
+import { getUser } from '../../appSlice';
 
 const Login = () => {
   const [loginData, setloginData] = useState({ email: '', password: '' });
+  const [validated, setValidated] = useState(false);
+  const [errorMessage, seterrorMessage] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate()
   const { authenticated, user, signIn } = useSanctum();
 
-  // const {isAuth} = useSelector(store => store.login)
-  // const { setAuth } = useContext(AuthContext);
-  
-  // useEffect(() => {
-  //   if (isAuth) {
-  //     return navigate('/')
-  //   }
-  // }, [isAuth]);
-
+  useEffect(() => {
+    if (authenticated) {
+      navigate('/')
+      dispatch(getUser(user))
+    }
+  }, [authenticated, dispatch, navigate, user]);
+  const onChangeHandler = (e) => {
+    if (errorMessage) {
+      seterrorMessage('')
+    }
+    setloginData((prev) => {
+      prev[e.target.name] = e.target.value;
+      return prev;
+    });
+  }
   const onSubmitHandler = (e) => {
     e.preventDefault()
-    signIn(loginData.email, loginData.password)
-      .then(() => navigate('/'))
-      .catch(() => window.alert("Incorrect email or password"));
+    const form = e.currentTarget;
+    if (form.checkValidity()) {
+      e.stopPropagation();
+      signIn(loginData.email, loginData.password)
+        .then(() => {
+          seterrorMessage('')
+          navigate('/')
+        })
+        .catch(() => seterrorMessage("Incorrect email or password"));
+    }
+    setValidated(true);
 
-    // setAuth({ email: loginData.email, password:loginData.password });
-    // dispatch(login(loginData))
   }
-  
+
   return <>
-    <div className='container d-flex justify-content-center'>
-      <Form className='w-50' onSubmit={e => onSubmitHandler(e)}>
+    <div className={style.loginForm + ' mt-5 container bg-gradient d-flex justify-content-center'}>
+      <Form className='w-50 m-auto' onSubmit={onSubmitHandler} noValidate validated={validated}>
+        {errorMessage
+          ? <h3 className='text-danger'>{errorMessage}</h3>
+          : <h3 className='text-success'>Plase login</h3>
+        }
         <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
           <Form.Control
-            value={loginData.email}
-            onChange={e => setloginData(state => ({...state, email: e.target.value}))}
+            required
+            name='email'
+            defaultValue={loginData.email}
+            onChange={onChangeHandler}
             type="email"
             placeholder="Enter email"
           />
-          <Form.Text className="text-muted">
-            We'll never share your email with anyone else.
-          </Form.Text>
         </Form.Group>
-
         <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
           <Form.Control
-            value={loginData.password}
-            onChange={e => setloginData(state => ({...state, password: e.target.value}))}
+            required
+            name='password'
+            defaultValue={loginData.password}
+            onChange={onChangeHandler}
             type="password"
             placeholder="Password"
           />

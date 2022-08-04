@@ -12,4 +12,7 @@ export const formatDate = (addDay = 0) => {
   }
   return [year, month, day].join('-');
 }
-// formatDate(99980800)
+
+export const logout = () => {
+  window.location.replace('/login')
+}

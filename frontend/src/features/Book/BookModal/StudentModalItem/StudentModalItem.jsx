@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addBookToStudent } from '../../bookSlice';
 import style from './studentModalItem.module.css'
 
-const StudentModalItem = ({ student, bookId, assignedProcessStop }) => {
+const StudentModalItem = ({ student, bookId, assignedProcessStop, clearSearchValue }) => {
   const {assignedProcess} = useSelector(store => store.book)
   const dispatch = useDispatch()
   const assignHandler = (book_id, student_id) => {
+    clearSearchValue()
     const payload = { book_id, student_id }
     dispatch(addBookToStudent(payload))
   }

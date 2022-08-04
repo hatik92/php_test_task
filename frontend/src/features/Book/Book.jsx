@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { getAssignStudents, getBook, removeBookToStudent } from './bookSlice';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import BookModal from './BookModal/BookModal';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
@@ -16,6 +16,7 @@ const Book = () => {
   const { book, removeProcess, loading } = useSelector(store => store.book)
   const [show, setShow] = useState(false);
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(getBook(bookId));
@@ -33,9 +34,14 @@ const Book = () => {
   if (!loading) {
     return <BookLoader />
   }
+  if (!book.id) {
+    return navigate('/404')
+  }
   return <>
     <div>
-      {book.id ? <div className="container bg-light">
+      {/* {book.id
+      ?  */}
+      <div className="container bg-light bg-gradient opacity-75 mt-5 p-5 rounded-3">
         <div>
           <h3>Book: {book.title.toUpperCase()}</h3>
           <p>Author: {book.author}</p>
@@ -73,10 +79,10 @@ const Book = () => {
             </Table>
           </div>
         </div>
-      </div> :
-        <div className='container'>
+      </div>
+      {/* : <div className='container'>
           <NotFound param='book' />
-        </div>}
+        </div> */}
       <BookModal
         handleClose={handleClose}
         show={show}

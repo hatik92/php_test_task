@@ -1,12 +1,6 @@
-import { useSelector } from 'react-redux';
 import './App.css';
-import BookLoader from './Common/Loader/BookLoader';
 import Router from './router';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from './Common/Context/AuthProvider';
-import { WithAuthRedirect } from './hoc/WithAuthRedirect';
-import Navigation from './features/Nav/Nav';
-import { Routes } from 'react-router-dom';
 import { Sanctum } from "react-sanctum";
 
 
@@ -18,22 +12,14 @@ function App() {
     signOutRoute: "api/logout",
     userObjectRoute: "api/user",
   };
-  
-  
-  // useEffect(() => {
-  //   dispatch(getCurrentUser())
-  // }, [dispatch]);
-
-  
 
   return <>
     <div className='bookParent'>
-    <Sanctum config={sanctumConfig}>
-      <BrowserRouter>
-        {/* <Navigation /> */}
-        <Router />
-      </BrowserRouter>
-    </Sanctum>
+      <Sanctum config={sanctumConfig}>
+        <BrowserRouter>
+          <Router />
+        </BrowserRouter>
+      </Sanctum>
     </div>
   </>
 }

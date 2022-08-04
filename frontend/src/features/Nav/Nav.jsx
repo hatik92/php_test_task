@@ -1,48 +1,28 @@
 import React, { useEffect } from 'react'
-import { Link, Outlet, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  // getCurrentUser,
-  // getUser,
-  // logout
-} from '../Login/loginSlice';
+import { useDispatch } from 'react-redux';
 import { useSanctum } from "react-sanctum";
 import { getUser } from '../../appSlice';
-// import style from './nav.module.scss'
 
 const Navigation = () => {
-  const { authenticated, user, signIn, signOut, checkAuthentication } = useSanctum();
+  const { authenticated, user, signOut } = useSanctum();
   const dispatch = useDispatch()
   const navigate = useNavigate();
   let location = useLocation();
   let [searchParams, setSearchParams] = useSearchParams();
-  // const { isAuth, user } = useSelector(store => store.login)
   useEffect(() => {
-    console.log(user);
-  //   checkAuthentication()
-    if (user) {
+    if (authenticated) {
       dispatch(getUser(user))
-    //   // debugger
-      // navigate("/login");
-    // } 
-    // else {
-    //   debugger
-    //   dispatch(getUser(user))
-    //   // return navigate("/");
     }
-  },[dispatch, user])
-    
-    
-  //   dispatch(getCurrentUser())
-  //   if (!isAuth) {
-  //     return navigate("/");
-  //   }
-  // }, [location.pathname]);
-
+    else if (authenticated === false) {
+      navigate("/login")
+      dispatch(getUser(user))
+    }
+  }, [location.pathname, authenticated, dispatch, navigate, user])
 
   const onSearchChangeHandler = (event) => {
     let search = event.target.value;
@@ -74,7 +54,7 @@ const Navigation = () => {
             </> : ''}
           </Nav>
           {authenticated ? <>
-            <Form
+            {(location.pathname === '/books' || location.pathname === '/students') && <Form
               className="d-flex"
               onSubmit={e => e.preventDefault()}
             >
@@ -86,14 +66,14 @@ const Navigation = () => {
                 value={searchParams.get("search") || ""}
                 onChange={(event) => onSearchChangeHandler(event)}
               />
-            </Form>
+            </Form>}
             <span className='text-success m-2'>{user.name}</span>
           </>
             : ''}
           {!authenticated
             ? <Link className='btn btn-outline-success' to='/login' >LogIn</Link>
             : <Link className='btn btn-outline-success' to='/login'
-            onClick={logoutHandler}
+              onClick={logoutHandler}
             >Logout</Link>
           }
         </Navbar.Collapse>

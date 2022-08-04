@@ -13,6 +13,12 @@ const BookModal = ({ show, handleClose, bookId }) => {
   const filterStudents = assignStudents.filter(student => {
     return (student.surname.toLowerCase().includes(searchValue.toLowerCase()) || student.first_name.toLowerCase().includes(searchValue.toLowerCase()))
   })
+  
+  const clearSearchValue = () => {
+    if (searchValue) {
+      setSearchValue('')
+    }
+  }
 
   return <>
     <Modal show={show} onHide={handleClose} scrollable={true} contentClassName={style.bookModal}>
@@ -39,6 +45,7 @@ const BookModal = ({ show, handleClose, bookId }) => {
                 student={student}
                 assignedProcessStop={assignedProcessStop}
                 bookId={bookId}
+                clearSearchValue={clearSearchValue}
               />
             ) : <div className='text-center m-auto'>
               <h1>Oops... </h1>

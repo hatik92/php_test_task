@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Book from './features/Book/Book';
 import Books from './features/Books/Books';
 import Navigation from './features/Nav/Nav';
@@ -12,35 +12,30 @@ import NotFound from "./Common/404notFound/NotFound";
 
 function Router() {
   const { initializad } = useSelector(store => store.app)
-  // if (!initializad) {
-  //     return <BookLoader />
-  //   }
+
   return <>
-    {/* <BrowserRouter> */}
-      <Navigation />
-      
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={!initializad ? <BookLoader /> :<Home />}></Route>
-        <Route path="books" element={<Books />} >
-          <Route index element={<Books />} />
-          <Route path=":page" element={<Books />} />
-        </Route>
-        <Route path="book">
-          <Route index element={
-            <main style={{ padding: "1rem" }}>
-              <p>Select an invoice</p>
-            </main>
-          } />
-          <Route path=":bookId" element={<Book />} />
-        </Route>
-        <Route path="students" element={<Students />} >
-          <Route path=":studentId" element={<Student />} />
-        </Route>
-        <Route path="404" element={<NotFound />} />
-      </Routes>
-      
-    {/* </BrowserRouter> */}
+    <Navigation />
+    {!initializad ? <BookLoader /> : <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<Home />}></Route>
+      <Route path="books" element={<Books />} >
+        <Route index element={<Books />} />
+        <Route path=":page" element={<Books />} />
+      </Route>
+      <Route path="book">
+        <Route index element={
+          <main style={{ padding: "1rem" }}>
+            <p>Select an invoice</p>
+          </main>
+        } />
+        <Route path=":bookId" element={<Book />} />
+      </Route>
+      <Route path="students" element={<Students />} >
+        <Route path=":studentId" element={<Student />} />
+      </Route>
+      <Route path="404" element={<NotFound />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>}
   </>
 }
 
