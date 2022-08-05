@@ -45,7 +45,7 @@ const Books = () => {
             <BootstrapPagination pagination={meta} links={links} getData={getBooks} current_page={page} />
           </div>
           </>
-          : <h3>Uh Oh! Book not found!</h3>
+          : <h3 className='text-center'>Uh Oh! Book not found!</h3>
         : <Skeleton />}
     </div>
   </>

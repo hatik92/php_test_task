@@ -46,6 +46,73 @@ class BookController extends Controller
                     'response' => ['Incorrect data has been entered!']
                 ]);
             }
+//            return gettype($request->title);
+            $title = $request->title;
+            if (Book::where('title', $title)->first()){
+                return ApiResponse::__createBadResponse('This book is already in the library, you can change the details of this book!');
+            }
+            $book = new Book();
+
+            $book->title = $request->input('title');
+            $book->author = $request->input('author');
+            $book->count = $request->input('count');
+            $book->year=$request->input('year');
+            $book->save();
+
+            return ApiResponse::create([
+                'success' => true
+            ]);
+
+        } catch (\Throwable $err) {
+            return ApiResponse::createServerError($err);
+        }
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+//        dd(Book::with('students')->findOrFail($id)->toSql());
+        return Book::with('students')->findOrFail($id);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+
+
+    public function assignBook(AssaginBookRequest $request)
+    {
+        try {
+            if (!$request->validated()) {
+                return ApiResponse::createValidationResponse([
+                    'response' => ['Incorrect data has been entered!']
+                ]);
+            }
             $book_student = DB::table('book_student')
                 ->where([
                     ['book_id', '=', $request->book_id],
@@ -86,45 +153,7 @@ class BookController extends Controller
         } catch (\Throwable $err) {
             return ApiResponse::createServerError($err);
         }
-
     }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-//        dd(Book::with('students')->findOrFail($id)->toSql());
-        return Book::with('students')->findOrFail($id);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
 
     public function detachBook(StoreBookRequest $request)
     {

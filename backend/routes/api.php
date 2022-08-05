@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\LoginController;
 */
 
 Route::post('login', [LoginController::class, 'login']);
+Route::post('loginDashboard', [LoginController::class, 'loginAdmin']);
 Route::post('logout', [LoginController::class, 'logout']);
 
 
@@ -32,6 +33,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         'students' => StudentController::class
     ]);
     Route::post('/books/detach', [BookController::class, 'detachBook']);
+    Route::post('/books/assign', [BookController::class, 'assignBook']);
 });
 
 

@@ -35,7 +35,7 @@ export const books = {
       .then(res => res.data)
   },
   addBookToStudent(book_id, student_id) {
-    return apiConfig.post('/api/books', { book_id, student_id })
+    return apiConfig.post('/api/books/assign', { book_id, student_id })
       .then(res => res.data)
   },
   removeBookToStudent(book_id, student_id) {

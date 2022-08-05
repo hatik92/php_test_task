@@ -27,6 +27,27 @@ class LoginController extends Controller
         return Auth::user();
     }
 
+    public function loginAdmin(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+
+        if (!Auth::attempt($credentials)) {
+            throw ValidationException::withMessages([
+                'email' => [
+                    __('auth.failed')
+                ]
+            ]);
+        }
+        if (!Auth::user()->admin) {
+            Auth::logout();
+            return 'is not admin';
+        }
+        return Auth::user();
+    }
+
     public function logout()
     {
         return Auth::logout();

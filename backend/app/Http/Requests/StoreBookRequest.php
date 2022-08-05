@@ -24,8 +24,10 @@ class StoreBookRequest extends FormRequest
     public function rules()
     {
         return [
-            'book_id'    => 'required|integer',
-            'student_id' => 'required|integer'
+            'title'     => 'required|string',
+            'author'    => 'required|string',
+            'year'      => 'required|integer',
+            'count'     => 'required|integer',
         ];
     }
 }
