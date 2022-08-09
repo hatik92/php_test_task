@@ -27,14 +27,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::group(['middleware' => 'auth:sanctum'], function () {
+//Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResources([
         'books' => BookController::class,
         'students' => StudentController::class
     ]);
     Route::post('/books/detach', [BookController::class, 'detachBook']);
     Route::post('/books/assign', [BookController::class, 'assignBook']);
-});
+//});
 
 
-
+Route::get('scraper', [BookController::class, 'dumpHtml']);

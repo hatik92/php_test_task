@@ -9,19 +9,25 @@ import { useSanctum } from "react-sanctum";
 import { getUser } from '../../appSlice';
 
 const Navigation = () => {
-  const { authenticated, user, signOut } = useSanctum();
+  const { authenticated, user, signOut, checkAuthentication } = useSanctum();
   const dispatch = useDispatch()
   const navigate = useNavigate();
   let location = useLocation();
   let [searchParams, setSearchParams] = useSearchParams();
   useEffect(() => {
-    if (authenticated) {
+    checkAuthentication()
+    .then(res => {
+      if (res && authenticated) {
+        dispatch(getUser(user))
+      } else if (authenticated === false) {
+        navigate("/login")
+        dispatch(getUser(user))
+      }
+    })
+    .catch(err => {
       dispatch(getUser(user))
-    }
-    else if (authenticated === false) {
-      navigate("/login")
-      dispatch(getUser(user))
-    }
+      navigate("/500")
+    })
   }, [location.pathname, authenticated, dispatch, navigate, user])
 
   const onSearchChangeHandler = (event) => {

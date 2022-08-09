@@ -9,6 +9,7 @@ import Login from './features/Login/Login';
 import BookLoader from "./Common/Loader/BookLoader";
 import { useSelector } from "react-redux";
 import NotFound from "./Common/404notFound/NotFound";
+import ServerError from './Common/ServerError/ServerError';
 
 function Router() {
   const { initializad } = useSelector(store => store.app)
@@ -34,6 +35,7 @@ function Router() {
         <Route path=":studentId" element={<Student />} />
       </Route>
       <Route path="404" element={<NotFound />} />
+      <Route path="500" element={<ServerError />} />
       <Route path="*" element={<NotFound />} />
     </Routes>}
   </>

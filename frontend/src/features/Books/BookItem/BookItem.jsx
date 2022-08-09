@@ -9,7 +9,7 @@ const BookItem = ({ book }) => {
     <div className={'card mb-3 w-100 shadow-none p-3 rounded ' + styles.bookBlock}>
       <div className="row g-0">
         <div className="col-md-4">
-          <img src={bookImg} className="img-fluid rounded-start" alt="..." />
+          <img src={book.img ? book.img : bookImg} className="img-fluid rounded-start" alt="..." />
         </div>
         <div className="col-md-8">
           <div className="card-body">

@@ -9,6 +9,8 @@ import Table from 'react-bootstrap/Table';
 import BookStudentItem from './BookStudentItem/BookStudentItem';
 import NotFound from '../../Common/404notFound/NotFound';
 import BookLoader from '../../Common/Loader/BookLoader';
+import bookImg from '../../images/book.jpg';
+import style from './book.module.css'
 
 
 const Book = () => {
@@ -43,12 +45,19 @@ const Book = () => {
       ?  */}
       <div className="container bg-light bg-gradient opacity-75 mt-5 p-5 rounded-3">
         <div>
-          <h3>Book: {book.title.toUpperCase()}</h3>
-          <p>Author: {book.author}</p>
-          <p>Year: {book.year}</p>
-          <p className={book.count === book.available ? 'text-danger' : 'text-success'}>Available count: <span> {book.count - book.available}</span></p>
+          <div className='d-flex'>
+            <div className='m-3'>
+              <img className={style.bookImg} src={book.img ? book.img : bookImg} />
+            </div>
+            <div className='m-3'>
+              <h3>Book: {book.title.toUpperCase()}</h3>
+              <p>Author: {book.author}</p>
+              <p>Year: {book.year}</p>
+              <p className={book.count === book.available ? 'text-danger' : 'text-success'}>Available count: <span> {book.count - book.available}</span></p>
+            </div>
+          </div>
           <div className="d-flex justify-content-between">
-            <h3>students who took the book</h3>
+            <h3>Students who took the book</h3>
             <Button variant="primary" onClick={handleShow}>
               + Assign
             </Button>

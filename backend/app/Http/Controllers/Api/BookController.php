@@ -3,18 +3,23 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AssaginBookRequest;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Resources\BookResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Book;
 use App\Models\Student;
 use Carbon\Carbon;
+use Goutte\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Faker\Factory as Faker;
 
 class BookController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -25,9 +30,9 @@ class BookController extends Controller
         if ($request->search && $request->search != '') {
             $search = $request->search;
             return BookResource::collection(Book::where('title', 'LIKE', "%{$search}%")
-                ->orWhere('author', 'LIKE', "%{$search}%")->paginate(5));
+                ->orWhere('author', 'LIKE', "%{$search}%")->orderByDesc('id')->paginate(5));
         }
-        return BookResource::collection(Book::paginate(5));
+        return BookResource::collection(Book::orderByDesc('id')->paginate(5));
     }
 
     /**
@@ -41,6 +46,12 @@ class BookController extends Controller
     public function store(StoreBookRequest $request)
     {
         try {
+            if (!Auth::user()->admin) {
+                Auth::logout();
+                return ApiResponse::createValidationResponse([
+                    'response' => ['Is not admin!']
+                ]);
+            }
             if (!$request->validated()) {
                 return ApiResponse::createValidationResponse([
                     'response' => ['Incorrect data has been entered!']
@@ -49,15 +60,17 @@ class BookController extends Controller
 //            return gettype($request->title);
             $title = $request->title;
             if (Book::where('title', $title)->first()){
-                return ApiResponse::__createBadResponse('This book is already in the library, you can change the details of this book!');
+                return ApiResponse::__createBadResponse('This book is already in the library! You can change it under All books->Edit!');
             }
-            $book = new Book();
 
-            $book->title = $request->input('title');
-            $book->author = $request->input('author');
-            $book->count = $request->input('count');
-            $book->year=$request->input('year');
-            $book->save();
+            Book::create($request->validated());
+//            $book = new Book();
+//
+//            $book->title = $request->input('title');
+//            $book->author = $request->input('author');
+//            $book->count = $request->input('count');
+//            $book->year=$request->input('year');
+//            $book->save();
 
             return ApiResponse::create([
                 'success' => true
@@ -88,9 +101,28 @@ class BookController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreBookRequest $request, Book $book)
     {
-        //
+        try {
+            if (!Auth::user()->admin) {
+                Auth::logout();
+                return ApiResponse::createValidationResponse([
+                    'response' => ['Is not admin!']
+                ]);
+            }
+            if (!$request->validated()) {
+                return ApiResponse::createValidationResponse([
+                    'response' => ['Incorrect data has been entered!']
+                ]);
+            }
+            $book->update($request->validated());
+            return ApiResponse::create([
+                'success' => true
+            ]);
+
+        } catch (\Throwable $err) {
+            return ApiResponse::createServerError($err);
+        }
     }
 
     /**
@@ -155,7 +187,7 @@ class BookController extends Controller
         }
     }
 
-    public function detachBook(StoreBookRequest $request)
+    public function detachBook(AssaginBookRequest $request)
     {
         try {
             if (!$request->validated()) {

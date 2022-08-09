@@ -43,7 +43,7 @@ class LoginController extends Controller
         }
         if (!Auth::user()->admin) {
             Auth::logout();
-            return 'is not admin';
+            return 'Is not admin!';
         }
         return Auth::user();
     }

@@ -17,7 +17,7 @@ class BookFactory extends Factory
             'title' => $this->faker->sentence($nbWords = 2),
             'author' => $this->faker->firstName,
             'count' => $this->faker->numberBetween($min = 0, $max = 25),
-            'year' => $this->faker->numberBetween($min = 1965, $max = 2005) 
+            'year' => $this->faker->numberBetween($min = 1800, $max = 2005)
         ];
     }
 }

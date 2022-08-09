@@ -10,24 +10,33 @@ const BootstrapPagination = ({ pagination, links, getData, current_page = 1 }) =
   const searchValue = searchParams.get('search');
 
   let items = [];
-  for (let number = 1; number <= pagination.last_page; number++) {
-    const activePage = current_page === number ? 'active' : ''
-    items.push(
-      <li key={number} className="page-item">
+  for (let i = 1; i < pagination.links.length - 1; i++) {
+    const activePage = current_page === i ? 'active' : ''
+    if (pagination.links[i].label === '...') {
+      items.push(
+        <li key={i} className="page-item">
+          <span className='page-link'>{pagination.links[i].label}</span>
+        </li>
+      );
+    } else {items.push(
+      <li key={i} className="page-item">
         <NavLink
           className={'page-link ' + activePage }
-          to={'/books/' + number + location.search}
-          onClick={() => changePageHandler(number)}
+          to={'/books/' + pagination.links[i].label + location.search}
+          onClick={() => changePageHandler(pagination.links[i].label)}
+          disabled={pagination.links[i].label === '...'}
         >
-          {number}
+          {pagination.links[i].label}
         </NavLink>
       </li>
-    );
+    );}
   }
 
   const changePageHandler = (currentPage) => {
-    const payload = { current_page: currentPage, search: searchValue || '' }
-    dispatch(getData(payload))
+    // if (Number.isInteger(currentPage)) {
+      const payload = { current_page: currentPage, search: searchValue || '' }
+      dispatch(getData(payload))
+    // }
   }
 
   return <>

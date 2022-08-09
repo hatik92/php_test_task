@@ -15,7 +15,7 @@ function App() {
 
   return <>
     <div className='bookParent'>
-      <Sanctum config={sanctumConfig}>
+      <Sanctum config={sanctumConfig} checkOnInit={false}>
         <BrowserRouter>
           <Router />
         </BrowserRouter>
