@@ -22,14 +22,41 @@ const Login = () => {
   const [validated, setValidated] = useState(false);
   // const [errorMessage, seterrorMessage] = useState('');
   const navigate = useNavigate()
-  const { authenticated, user, signIn } = useSanctum();
+  const { authenticated, user, signIn, checkAuthentication } = useSanctum();
 
 
   useEffect(() => {
-    if (authenticated) {
-      navigate('/')
+    // if (authenticated) {
+      // console.log('aaa');
+      // if (user.admin) {
+      //   navigate('/')
+      // } else {
+      //   signOut()
+      // }
       // dispatch(getUser(user))
-    }
+      checkAuthentication()
+        .then(res => {
+          if (res && authenticated) {
+            if (user.admin) {
+              navigate("/")
+              dispatch(getUser(user))
+            } else {
+              signOut()
+            }
+          } 
+          // else if (authenticated === false) {
+          //   navigate("/login")
+          //   dispatch(getUser(user))
+          // }
+        })
+        .catch(err => {
+          dispatch(getUser(user))
+          navigate("/500")
+        })
+      // if (authenticated === false) {
+      //   navigate("/login")
+      // }
+    // }
   }, [authenticated, navigate]);
 
   const onChangeHandler = (e) => {
@@ -42,7 +69,7 @@ const Login = () => {
     })
   }
 
-  
+
   const onSubmitHandler = (e) => {
     e.preventDefault()
     const form = e.currentTarget;
@@ -53,7 +80,7 @@ const Login = () => {
           // seterrorMessage('')
           navigate('/')
         })
-        // .catch(() => seterrorMessage("Incorrect email or password"));
+      // .catch(() => seterrorMessage("Incorrect email or password"));
     }
     setValidated(true);
   }

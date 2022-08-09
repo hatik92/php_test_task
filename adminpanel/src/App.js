@@ -29,7 +29,7 @@ const App = () => {
   }
 
   return (
-    <Sanctum config={sanctumConfig}>
+    <Sanctum config={sanctumConfig} checkOnInit={false}>
       <BrowserRouter>
       <Suspense fallback={loading}>
         <Routes>

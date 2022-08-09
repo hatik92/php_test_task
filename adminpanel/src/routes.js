@@ -5,6 +5,7 @@ const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
 
 // Books
+const AllBooks = React.lazy(() => import('./views/Books/AllBooks/AllBooks'))
 const AddBook = React.lazy(() => import('./views/Books/AddBook/AddBook'))
 
 // Base
@@ -55,7 +56,8 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
-  { path: '/books', name: 'Books', element: AddBook, exact: true },
+  { path: '/books', name: 'Books', element: AllBooks, exact: true },
+  { path: '/books/all-books', name: 'Books', element: AllBooks },
   { path: '/books/add-book', name: 'Books', element: AddBook },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },

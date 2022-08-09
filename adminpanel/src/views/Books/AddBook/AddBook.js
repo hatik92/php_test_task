@@ -11,24 +11,35 @@ import {
   CFormLabel,
   CRow,
 } from '@coreui/react'
+import AddOrEditBookForm from '../AddOrEditBookForm/AddOrEditBookForm';
 
 const AddBook = () => {
 
-  const [bookTitle, setbookTitle] = useState('');
-  const [bookAuthor, setbookAuthor] = useState('');
-  const [bookYear, setbookYear] = useState('');
-  const [bookCount, setbookCount] = useState('');
+  // const [bookTitle, setbookTitle] = useState('');
+  // const [bookAuthor, setbookAuthor] = useState('');
+  // const [bookYear, setbookYear] = useState('');
+  // const [bookCount, setbookCount] = useState('');
+  const [bookData, setbookData] = useState({title: '', author: '', year: '', count: ''});
   const dispatch = useDispatch()
 
   const handlerSubmit = (e) => {
     e.preventDefault()
-    const bookData = { title: bookTitle, author: bookAuthor, year: bookYear, count: bookCount }
+    // const bookData = { title: bookData.title, author: bookData.author, year: bookData.year, count: bookData.count }
     console.log(bookData);
-    dispatch(addBook(bookData))
-    setbookTitle('')
-    setbookAuthor('')
-    setbookYear('')
-    setbookCount('')
+    // dispatch(addBook(bookData))
+    // setbookTitle('')
+    // setbookAuthor('')
+    // setbookYear('')
+    // setbookCount('')
+    setbookData(state => {
+      return {
+        ...state,
+        title: '',
+        author: '',
+        year: '',
+        count: ''
+      }
+    })
   }
 
 
@@ -37,7 +48,8 @@ const AddBook = () => {
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardBody>
-            <CForm onSubmit={handlerSubmit}>
+            <AddOrEditBookForm handlerSubmit={handlerSubmit} setbookData={setbookData} bookData={bookData} />
+            {/* <CForm onSubmit={handlerSubmit}>
               <div className="mb-3">
                 <CFormLabel htmlFor="book_title">Book title</CFormLabel>
                 <CFormInput
@@ -86,7 +98,7 @@ const AddBook = () => {
                   Confirm identity
                 </CButton>
               </div>
-            </CForm>
+            </CForm> */}
           </CCardBody>
         </CCard>
       </CCol>

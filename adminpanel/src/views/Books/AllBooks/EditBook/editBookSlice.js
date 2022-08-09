@@ -4,14 +4,16 @@ import { books } from "src/api/api";
 
 const initialState = {
   initialized: false,
+  // meta: {},
+  // books: []
 }
 
-export const addBook = createAsyncThunk(
-  'addBook/addBook',
+export const editBook = createAsyncThunk(
+  'editBook/editBook',
   async (payload,{rejectWithValue, dispatch, getState}) => {
     try {
-      const response = await books.addBook(payload)
-      if (response.statusText !== 'OK') throw new Error(response.response.data.error)
+      const response = await books.updateBook(payload.bookId, payload?.bookData)
+      if (!response.data.success) throw new Error(response.response.data.error)
       return response.data
     } catch (error) {
       return rejectWithValue(error.response)
@@ -19,22 +21,22 @@ export const addBook = createAsyncThunk(
   }
 )
 
-export const addBookSlice = createSlice({
-  name: 'addBook',
+export const editBookSlice = createSlice({
+  name: 'editBook',
   initialState,
   reducers: { },
   extraReducers: (builder) => {
     builder
-      .addCase(addBook.pending, (state) => {
+      .addCase(editBook.pending, (state) => {
         state.initialized = false
       })
-      .addCase(addBook.fulfilled, (state, action) => {
+      .addCase(editBook.fulfilled, (state, action) => {
         // state.books = action.payload.data
         // state.meta = action.payload.meta
         // state.links = action.payload.links
         // state.initialized = true
       })
-      .addCase(addBook.rejected, (state, action) => {
+      .addCase(editBook.rejected, (state, action) => {
         // state.error = action.payload
       })
   },
@@ -43,4 +45,4 @@ export const addBookSlice = createSlice({
 
 
 
-export default addBookSlice.reducer
+export default editBookSlice.reducer
