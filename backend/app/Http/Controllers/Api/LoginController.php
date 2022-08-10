@@ -41,10 +41,15 @@ class LoginController extends Controller
                 ]
             ]);
         }
+
         if (!Auth::user()->admin) {
             Auth::logout();
+            return response()
+                ->json(['message' => 'Is not admin!'])
+                ->withCallback($request->input('callback'));
             return 'Is not admin!';
         }
+
         return Auth::user();
     }
 

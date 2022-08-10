@@ -43,7 +43,7 @@ export const books = {
     return apiConfig.put('/api/books/' + id, bookData)
       .then(res => res.data)
   },
-  removeBook(bookId) {
+  deleteBook(bookId) {
     return apiConfig.delete('/api/books/' + bookId)
       .then(res => res.data)
   },

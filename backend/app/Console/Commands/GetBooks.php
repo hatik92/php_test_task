@@ -43,32 +43,34 @@ class GetBooks extends Command
     {
         try {
             $client = new Client();
-            $url = 'https://www.gutenberg.org/';
+            $url = 'https://manybooks.net/search-book?sticky=1&page=8';
             $page = $client->request('GET', $url);
-            $companies = $page->filter('div[class="lib latest no-select"] > a')->each(function ($node) {
-                $book['title'] = $node->attr('title');
-                $book['author'] = $node->attr('authors');
-                $book['csacsc'] = $node->attr('authors');
-                $book['img'] = $node->filter('.cover_img > img')->attr('src');
+
+            $books = $page->filter('.book-hover')->each(function ($node) {
+                $book['title'] = $node->filter('.book-hover-content')->first()->filter('a')->first()->text();
+                $book['author'] = $node->filter('span a')->text();
+                $book['img'] = $node->filter('.image img')->attr('src');
                 return $book;
             });
-            $this->output->progressStart(count($companies));
+
+//            $this->output->progressStart(count($books));
             $faker = Faker::create();
-            foreach ($companies as $item) {
-                Book::create([
+            foreach ($books as $item) {
+                Book::updateOrCreate([
                     'title'     => $item['title'],
-                    'author'    => $item['author'],
-                    'img'       => $url.$item['img'],
+                    'author'    => $item['author']
+                ],[
+                    'img'       => 'https://manybooks.net'.$item['img'],
                     'count'     => $faker->numberBetween($min = 0, $max = 25),
-                    'year'      => $faker->numberBetween($min = 1800, $max = 2005),
+                    'year'      => $faker->numberBetween($min = 1800, $max = 2005)
                 ]);
             }
-            for ($i = 0; $i < count($companies); $i++) {
-                sleep(1);
-                $this->output->progressAdvance();
-            }
-
-            $this->output->progressFinish();
+//            for ($i = 0; $i < count($books); $i++) {
+//                sleep(1);
+//                $this->output->progressAdvance();
+//            }
+//
+//            $this->output->progressFinish();
             $this->info("Books added successfully!");
         } catch (\Throwable $err) {
             $this->error($err);

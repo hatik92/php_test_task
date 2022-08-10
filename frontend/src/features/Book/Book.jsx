@@ -43,7 +43,7 @@ const Book = () => {
     <div>
       {/* {book.id
       ?  */}
-      <div className="container bg-light bg-gradient opacity-75 mt-5 p-5 rounded-3">
+      <div className={"container bg-gradient mt-5 p-5 rounded-3 " + style.book}>
         <div>
           <div className='d-flex'>
             <div className='m-3'>

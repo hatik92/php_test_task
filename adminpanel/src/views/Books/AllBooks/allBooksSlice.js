@@ -21,6 +21,20 @@ export const allBooks = createAsyncThunk(
   }
 )
 
+export const deleteBook = createAsyncThunk(
+  'allBooks/deleteBook',
+  async (payload, { rejectWithValue, dispatch, getState }) => {
+    try {
+      const response = await books.deleteBook(payload?.bookId)
+      if (!response.data.success) throw new Error(response.response.data.error)
+      dispatch(removeBook(payload?.bookId))
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.response)
+    }
+  }
+)
+
 export const allBooksSlice = createSlice({
   name: 'allBooks',
   initialState,
@@ -35,6 +49,10 @@ export const allBooksSlice = createSlice({
           count:  action.payload.bookData.count,
         }
         : book)
+    },
+    removeBook(state, action) {
+      debugger
+      state.books = state.books.filter(book => book.id !== action.payload)
     }
   },
   extraReducers: (builder) => {
@@ -56,5 +74,5 @@ export const allBooksSlice = createSlice({
 
 
 
-export const { updateBook } = allBooksSlice.actions
+export const { updateBook, removeBook } = allBooksSlice.actions
 export default allBooksSlice.reducer

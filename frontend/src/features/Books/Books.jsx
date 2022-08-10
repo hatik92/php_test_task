@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import BookLoader from '../../Common/Loader/BookLoader';
 
 const Books = () => {
   const { page } = useParams();
@@ -37,7 +38,7 @@ const Books = () => {
       {initialized
         ? allBooks.length
           ? <>
-            <div className='px-2'>
+            <div className='px-2 row row-cols-5'>
               {allBooks.map((book) =>
                 <BookItem key={book.id} book={book} />)}
             </div>
@@ -46,7 +47,7 @@ const Books = () => {
           </div>
           </>
           : <h3 className='text-center'>Uh Oh! Book not found!</h3>
-        : <Skeleton />}
+        : <BookLoader />}
     </div>
   </>
 }

@@ -37,4 +37,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //});
 
 
-Route::get('scraper', [BookController::class, 'dumpHtml']);
+Route::get('scraper', [BookController::class, 'libery']);

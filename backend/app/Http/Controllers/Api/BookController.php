@@ -19,7 +19,26 @@ use Faker\Factory as Faker;
 
 class BookController extends Controller
 {
+    public function libery() {
+//        try {
+            $client = new Client();
+            $url = 'https://manybooks.net/search-book?sticky=1';
+            $page = $client->request('GET', $url);
 
+            $books = $page->filter('.book-hover')
+                ->each(function ($node) {
+                $book['title'] = $node->filter('.book-hover-content')->first()->filter('a')->first()->text();
+                $book['author'] = $node->filter('span a')->text();
+                $book['img'] = $node->filter('.image img')->attr('src');
+                return $book;
+            });
+            print "<pre>";
+            print_r($books);
+//            dd($books);
+//        } catch (\Throwable $err) {
+//            $this->error($err);
+//        }
+    }
     /**
      * Display a listing of the resource.
      *
@@ -30,9 +49,9 @@ class BookController extends Controller
         if ($request->search && $request->search != '') {
             $search = $request->search;
             return BookResource::collection(Book::where('title', 'LIKE', "%{$search}%")
-                ->orWhere('author', 'LIKE', "%{$search}%")->orderByDesc('id')->paginate(5));
+                ->orWhere('author', 'LIKE', "%{$search}%")->orderByDesc('id')->paginate(20));
         }
-        return BookResource::collection(Book::orderByDesc('id')->paginate(5));
+        return BookResource::collection(Book::orderByDesc('id')->paginate(20));
     }
 
     /**
@@ -131,9 +150,16 @@ class BookController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Book $book)
     {
-        //
+        try {
+            $book->delete();
+            return ApiResponse::create([
+                'success' => true
+            ]);
+        } catch (\Throwable $err) {
+            return ApiResponse::createServerError($err);
+        }
     }
 
 

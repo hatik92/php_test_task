@@ -3,11 +3,20 @@ import { CTableRow, CTableHeaderCell, CTableDataCell, CButton } from '@coreui/re
 import CIcon from '@coreui/icons-react';
 import { cilPencil, cilTrash } from '@coreui/icons';
 import EditBook from '../EditBook/EditBook';
+import { useDispatch } from 'react-redux';
+import { deleteBook } from '../allBooksSlice';
+import DeleteModal from './../../../../components/deleteModal/DeleteModal';
 
-const BookItem = ({book, index}) => {
+const BookItem = ({ book, index, addToast }) => {
 
-  const [visible, setVisible] = useState(false)
+  const [visibleEditModal, setVisibleEditModal] = useState(false)
+  const [visibleDeleteModal, setVisibleDeleteModal] = useState(false)
 
+  const dispatch = useDispatch()
+  const deleteBookHandler = (bookId) => {
+    console.log(bookId);
+    dispatch(deleteBook({ bookId }))
+  }
 
   return <>
     <CTableRow className="align-middle">
@@ -17,17 +26,29 @@ const BookItem = ({book, index}) => {
       <CTableDataCell>{book.year}</CTableDataCell>
       <CTableDataCell>{book.count}</CTableDataCell>
       <CTableDataCell>
-        <CButton onClick={() => setVisible(!visible)} shape="rounded-pill" title='Edit'>
-          <CIcon icon={cilPencil} size="xl"/>
+        <CButton onClick={() => setVisibleEditModal(!visibleEditModal)} shape="rounded-pill" title='Edit'>
+          <CIcon icon={cilPencil} size="xl" />
         </CButton>
       </CTableDataCell>
       <CTableDataCell>
-        <CButton color="danger" shape="rounded-pill" title='Delete'>
-          <CIcon icon={cilTrash} size="xl"/>
+        <CButton
+          color="danger"
+          shape="rounded-pill"
+          title='Delete'
+          onClick={() => setVisibleDeleteModal(!visibleDeleteModal)}
+        >
+          <CIcon icon={cilTrash} size="xl" />
         </CButton>
       </CTableDataCell>
     </CTableRow>
-    <EditBook visible={visible} setVisible={setVisible} book={book} />
+    <EditBook visible={visibleEditModal} setVisible={setVisibleEditModal} book={book} />
+    <DeleteModal
+      visible={visibleDeleteModal}
+      setVisible={setVisibleDeleteModal}
+      deleteBookHandler={deleteBookHandler}
+      id={book.id}
+      addToast={addToast}
+    />
   </>
 }
 
