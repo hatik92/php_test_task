@@ -1,0 +1,9 @@
+.studentItem {
+  background-color: rgb(255 255 255 / 68%);
+  height: 8em;
+}
+
+.studentItem img {
+  width: 96px;
+  border-radius: 50%;
+}

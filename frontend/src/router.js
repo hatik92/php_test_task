@@ -31,7 +31,13 @@ function Router() {
         } />
         <Route path=":bookId" element={<Book />} />
       </Route>
-      <Route path="students" element={<Students />} >
+      <Route path="students" element={<Students />} />
+      <Route path="student" element={<Student />} >
+        <Route index element={
+          <main style={{ padding: "1rem" }}>
+            <p>Select an invoice</p>
+          </main>
+        } />
         <Route path=":studentId" element={<Student />} />
       </Route>
       <Route path="404" element={<NotFound />} />

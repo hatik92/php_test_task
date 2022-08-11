@@ -14,6 +14,10 @@ const BookItem = ({ book }) => {
     <div className='col mb-4'>
       <div className={'shadow-none p-3 rounded ' + styles.bookBlock}>
         <div className="">
+          {book.return_date && <>
+            <p>Return date</p>
+            <p>{book.return_date}</p>
+          </>}
           <div className="">
             <Link className={styles.bookLink} to={'/book/' + book.id} title={book.title} >
               <img src={book.img ? book.img : bookImg} className="img-fluid rounded" alt="..." />

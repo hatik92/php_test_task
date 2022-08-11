@@ -51,6 +51,6 @@ export const students = {
   },
   getStudentById(id) {
     return apiConfig.get('/api/students/' + id)
-      .then(res => res.data)
+      // .then(res => res.data)
   }
 }
