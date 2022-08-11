@@ -16,7 +16,9 @@ class StudentFactory extends Factory
         return [
             'username' => $this->faker->userName,
             'first_name' => $this->faker->firstName,
-            'surname' => $this->faker->lastName                                  ,
+            'surname' => $this->faker->lastName,
+            'facultet' => $this->faker->jobTitle,
+            'image' => $this->faker->imageUrl(100, 100, 'users'),
         ];
     }
 }

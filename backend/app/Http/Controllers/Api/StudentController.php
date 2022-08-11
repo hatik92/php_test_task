@@ -53,7 +53,14 @@ class StudentController extends Controller
      */
     public function show($id)
     {
-        //
+        $books = Book::select('books.*', 'book_student.return_date')
+            ->join('book_student','books.id','=','book_student.book_id')
+            ->where('student_id','=',$id)
+            ->get();
+        $student = Student::findOrFail($id);
+        $student['books'] = $books;
+
+        return $student;
     }
 
     /**
