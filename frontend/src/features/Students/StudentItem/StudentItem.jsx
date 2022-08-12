@@ -10,11 +10,11 @@ const StudentItem = ({ student }) => {
         <img src={student.image} />
       </div>
       <div className='info mx-4'>
-        <h2>
+        <p className='h5'>
           <Link to={'/student/' + student.id}>
             {student.first_name} {student.surname}
           </Link>
-        </h2>
+        </p>
         <p>{student.facultet}</p>
       </div>
     </div>

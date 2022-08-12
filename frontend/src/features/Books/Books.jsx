@@ -9,6 +9,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import BookLoader from '../../Common/Loader/BookLoader';
+import style from './books.module.css';
 
 const Books = () => {
   const { page } = useParams();
@@ -38,7 +39,7 @@ const Books = () => {
       {initialized
         ? allBooks.length
           ? <>
-            <div className='px-2 row row-cols-5'>
+            <div className={'px-2 row row-cols-5 ' + style.booksBlock}>
               {allBooks.map((book) =>
                 <BookItem key={book.id} book={book} />)}
             </div>

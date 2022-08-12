@@ -6,6 +6,7 @@ use App\Http\Responses\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\SubscriberController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -36,5 +37,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::post('/books/assign', [BookController::class, 'assignBook']);
 //});
 
-
 Route::get('scraper', [BookController::class, 'libery']);
+
+
+Route::post('/subscribe', [SubscriberController::class, 'subscribe']);

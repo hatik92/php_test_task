@@ -7,7 +7,6 @@ import BookItem from './../Books/BookItem/BookItem';
 import userImg from '../../images/user.png'
 import BookLoader from './../../Common/Loader/BookLoader';
 
-
 const Student = () => {
   const { studentId } = useParams()
   const dispatch = useDispatch()
@@ -40,7 +39,14 @@ const Student = () => {
       </div>
     </div>
     <div className='container shadow p-3 mb-3 rounded'>
-      <div className='px-2 row row-cols-5'>
+      {/* <Grid row  spacing={3}>
+          {student.books.map((book) =>
+        <Grid  bp-sm={100} bp-hello={500} xs={3} jsIsLife={9} reactIsGood={15}>
+            <BookItem key={book.id} book={book} />
+        </Grid>
+            )}
+      </Grid> */}
+      <div className={'px-2 row row-cols-5 ' + style.booksBlock}>
         {student.books.map((book) =>
           <BookItem key={book.id} book={book} />)}
       </div>

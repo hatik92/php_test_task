@@ -5,3 +5,17 @@
 .bookImg {
   max-width: 300px;
 }
+.bookAbout {
+  display: flex;
+  justify-content: flex-start;
+}
+
+@media (max-width: 768px) {
+  .bookAbout {
+    display: block !important;
+  }
+  /* .booksBlock > * {
+    display: flex !important;
+    width: 100% !important;
+  } */
+}

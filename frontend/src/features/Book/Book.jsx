@@ -43,10 +43,10 @@ const Book = () => {
     <div>
       {/* {book.id
       ?  */}
-      <div className={"container bg-gradient mt-5 p-5 rounded-3 " + style.book}>
+      <div className={"container bg-gradient mt-5 pt-4 rounded-3 " + style.book}>
         <div>
-          <div className='d-flex'>
-            <div className='m-3'>
+          <div className={style.bookAbout}>
+            <div className='d-flex justify-content-center'>
               <img className={style.bookImg} src={book.img ? book.img : bookImg} />
             </div>
             <div className='m-3'>
@@ -63,7 +63,7 @@ const Book = () => {
             </Button>
           </div>
           <div>
-            <Table striped>
+            <Table striped responsive>
               <thead>
                 <tr>
                   <th>#</th>

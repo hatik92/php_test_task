@@ -7,3 +7,13 @@
   width: 96px;
   border-radius: 50%;
 }
+
+@media (max-width: 576px) {
+  .studentItem {
+    font-size: 12px;
+  }
+  .studentItem img {
+    width: 48px;
+    border-radius: 50%;
+  }
+}
