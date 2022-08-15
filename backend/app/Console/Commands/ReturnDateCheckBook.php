@@ -2,11 +2,14 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\Subscribe;
 use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 //use Illuminate\Support\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class ReturnDateCheckBook extends Command
 {
@@ -41,14 +44,14 @@ class ReturnDateCheckBook extends Command
      */
     public function handle()
     {
-//        $date = DB::table('book_student')
-////            ->whereDate('return_date', '<=', date("Y-m-d"))
-//            ->whereDate('return_date', '=', Carbon::now()->addDay()->format("Y-m-d"))
-//            ->get();
-        $student = Student::select('students.username')
+        $students = Student::select('students.username', 'students.first_name', 'book_student.book_id')
             ->join('book_student','students.id','=','book_student.student_id')
             ->where('return_date','=',Carbon::now()->addDay()->format("Y-m-d"))
             ->get();
-        $this->info($student);
+        foreach ($students as $student) {
+            Mail::to($student->username)
+            ->send(new Subscribe($student));
+            $this->info($student);
+        }
     }
 }

@@ -60,7 +60,7 @@ const Navigation = () => {
             </> : ''}
           </Nav>
           {authenticated ? <>
-            {(location.pathname === '/books' || location.pathname === '/students') && <Form
+            {(location.pathname.split('/')[1] === 'books' || location.pathname.split('/')[1] === 'students') && <Form
               className="d-flex"
               onSubmit={e => e.preventDefault()}
             >

@@ -19,26 +19,6 @@ use Faker\Factory as Faker;
 
 class BookController extends Controller
 {
-    public function libery() {
-//        try {
-            $client = new Client();
-            $url = 'https://manybooks.net/search-book?sticky=1';
-            $page = $client->request('GET', $url);
-
-            $books = $page->filter('.book-hover')
-                ->each(function ($node) {
-                $book['title'] = $node->filter('.book-hover-content')->first()->filter('a')->first()->text();
-                $book['author'] = $node->filter('span a')->text();
-                $book['img'] = $node->filter('.image img')->attr('src');
-                return $book;
-            });
-            print "<pre>";
-            print_r($books);
-//            dd($books);
-//        } catch (\Throwable $err) {
-//            $this->error($err);
-//        }
-    }
     /**
      * Display a listing of the resource.
      *

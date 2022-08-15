@@ -1,12 +1,26 @@
-@component('mail::message')
-# Introduction
+@component('mail::layout')
+    {{-- Header --}}
+    @slot('header')
+        @component('mail::header', ['url' => 'http://localhost:3000/books'])
+            # Library
+        @endcomponent
+    @endslot
 
-The body of your message.
+    {{-- Body --}}
+    Dear {{ $data['name'] }}, you are about to expire the book '{{$data['book']->title}}'. Please return the book within 24 hours.
 
-@component('mail::button', ['url' => ''])
-Button Text
-@endcomponent
+    {{-- Subcopy --}}
+{{--    @slot('subcopy')--}}
+{{--        @component('mail::subcopy')--}}
+{{--            <!-- subcopy here -->--}}
+{{--        @endcomponent--}}
+{{--    @endslot--}}
 
-Thanks,<br>
-{{ config('app.name') }}
+
+    {{-- Footer --}}
+    @slot('footer')
+        @component('mail::footer')
+            Sincerely, Library Administration
+        @endcomponent
+    @endslot
 @endcomponent

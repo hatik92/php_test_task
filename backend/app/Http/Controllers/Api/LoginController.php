@@ -27,6 +27,26 @@ class LoginController extends Controller
         return Auth::user();
     }
 
+    /**
+     * @throws ValidationException
+     */
+    public function loginStudent(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+//        echo !Auth::guard('student')->attempt($credentials);
+        if (!Auth::guard('student')->attempt($credentials)) {
+            throw ValidationException::withMessages([
+                'email' => [
+                    __('auth.failed')
+                ]
+            ]);
+        }
+        return Auth::guard('student')->user();
+    }
+
     public function loginAdmin(Request $request)
     {
         $credentials = $request->validate([

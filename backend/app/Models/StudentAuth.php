@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 
-class Student extends Authenticatable
+class StudentAuth extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -32,12 +32,7 @@ class Student extends Authenticatable
         'password',
         'remember_token',
     ];
-//    protected $hidden = ['pivot'];
 
-    public function books(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
-    {
-        return $this->belongsToMany(Book::class);
-    }
     /**
      * The attributes that should be cast.
      *
