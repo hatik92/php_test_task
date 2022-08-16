@@ -10,15 +10,25 @@ import BookLoader from "./Common/Loader/BookLoader";
 import { useSelector } from "react-redux";
 import NotFound from "./Common/404notFound/NotFound";
 import ServerError from './Common/ServerError/ServerError';
+import Profile from './features/Profile/Profile';
+import StudentBooks from "./features/Profile/StudentBooks/StudentBooks";
 
 function Router() {
   const { initializad } = useSelector(store => store.app)
+  const { loginAs }     = useSelector(store => store.login)
 
   return <>
     <Navigation />
     {!initializad ? <BookLoader /> : <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/" element={<Home />}></Route>
+      {loginAs === 'student' && <>
+      <Route path="studentBooks" element={<StudentBooks />}>
+        <Route index element={<StudentBooks />} />
+        <Route path=":page" element={<StudentBooks />} />
+      </Route>
+      <Route path="profile" element={<Profile />}></Route>
+      </>}
       <Route path="books" element={<Books />} >
         <Route index element={<Books />} />
         <Route path=":page" element={<Books />} />

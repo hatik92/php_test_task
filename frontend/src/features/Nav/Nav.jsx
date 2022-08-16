@@ -4,30 +4,32 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSanctum } from "react-sanctum";
 import { getUser } from '../../appSlice';
 
 const Navigation = () => {
   const { authenticated, user, signOut, checkAuthentication } = useSanctum();
+  const { loginAs } = useSelector(store => store.login);
+  console.log(loginAs);
   const dispatch = useDispatch()
   const navigate = useNavigate();
   let location = useLocation();
   let [searchParams, setSearchParams] = useSearchParams();
   useEffect(() => {
     checkAuthentication()
-    .then(res => {
-      if (res && authenticated) {
+      .then(res => {
+        if (res && authenticated) {
+          dispatch(getUser(user))
+        } else if (authenticated === false) {
+          navigate("/login")
+          dispatch(getUser(user))
+        }
+      })
+      .catch(err => {
         dispatch(getUser(user))
-      } else if (authenticated === false) {
-        navigate("/login")
-        dispatch(getUser(user))
-      }
-    })
-    .catch(err => {
-      dispatch(getUser(user))
-      navigate("/500")
-    })
+        navigate("/500")
+      })
   }, [location.pathname, authenticated, dispatch, navigate, user])
 
   const onSearchChangeHandler = (event) => {
@@ -54,10 +56,17 @@ const Navigation = () => {
             style={{ maxHeight: '100px' }}
             navbarScroll
           >
-            {authenticated ? <>
+            {authenticated ? 
+              loginAs === 'student'
+              ? <>
+              <Link className='nav-link' to="/studentBooks">Books</Link>
+              <Link className='nav-link' to="/profile">Profile</Link>
+              </>
+              : <>
               <Link className='nav-link' to="/books">Books</Link>
               <Link className='nav-link' to="/students">Students</Link>
-            </> : ''}
+              </> 
+            : ''}
           </Nav>
           {authenticated ? <>
             {(location.pathname.split('/')[1] === 'books' || location.pathname.split('/')[1] === 'students') && <Form

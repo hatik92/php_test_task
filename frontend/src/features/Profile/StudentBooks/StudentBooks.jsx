@@ -1,17 +1,16 @@
 import { useDispatch, useSelector } from 'react-redux'
-import BootstrapPagination from '../../Common/Pagination/Pagination'
-import BookItem from './BookItem/BookItem'
-import { getBooks } from './booksSlice';
+import { getBooks } from './studentBooksSlice';
 import { useParams } from 'react-router-dom';
-import Skeleton from './../../Common/Skeleton/Skeleton';
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import BookLoader from '../../Common/Loader/BookLoader';
-import style from './books.module.css';
+import style from './studentBooks.module.css';
+import BookItem from './BookItem/BookItem';
+import BootstrapPagination from '../../../Common/Pagination/Pagination';
+import BookLoader from '../../../Common/Loader/BookLoader';
 
-const Books = () => {
+const StudentBooks = () => {
   const { page } = useParams();
   const { initialized, books: allBooks, meta, links } = useSelector(store => store.books);
   const dispatch = useDispatch();
@@ -44,7 +43,7 @@ const Books = () => {
                 <BookItem key={book.id} book={book} />)}
             </div>
           <div className='d-flex justify-content-center'>
-            <BootstrapPagination pagination={meta} links={links} getData={getBooks} current_page={page} path='/books/' />
+            <BootstrapPagination pagination={meta} links={links} getData={getBooks} current_page={page} path='/studentBooks/' />
           </div>
           </>
           : <h3 className='text-center'>Uh Oh! Book not found!</h3>
@@ -53,4 +52,4 @@ const Books = () => {
   </>
 }
 
-export default Books
+export default StudentBooks

@@ -32,7 +32,7 @@ const Student = () => {
             <img src={student.image} className={style.studentimg} />
           </div>
           <div className='m-3'>
-            <h3>{student.first_name} {student.surname}</h3>
+            <h3>{student.name} {student.surname}</h3>
             <p>Facultet: {student.facultet}</p>
           </div>
         </div>

@@ -9,35 +9,42 @@ import { getUser } from '../../appSlice';
 import { loginAsUser } from './loginSlice';
 import librarianIcon from '../../images/librarian.png'
 import studentIcon from '../../images/student.png'
+import { useRef } from 'react';
 
 const Login = () => {
-  const [loginToggle, setloginToggle] = useState(false);
-
+  const loginAsStorage = localStorage.getItem("loginAs");
+  const [loginToggle, setloginToggle] = useState(loginAsStorage ? JSON.parse(loginAsStorage) : false);
   const [loginData, setloginData] = useState({ email: '', password: '' });
   const [validated, setValidated] = useState(false);
   const [errorMessage, seterrorMessage] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate()
   const { authenticated, user, signIn } = useSanctum();
+  const isFirstRender = useRef(true);
 
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    localStorage.setItem('loginAs', loginToggle)
+    dispatch(loginAsUser(loginToggle))
+  }, [loginToggle, dispatch]);
+
+  useEffect(() => {
+    if (!loginAsStorage) {
+      return
+    }
+    dispatch(loginAsUser(JSON.parse(loginAsStorage)))
+  }, [dispatch]);
+  
   useEffect(() => {
     if (authenticated) {
       navigate('/')
       dispatch(getUser(user))
     }
   }, [authenticated, dispatch, navigate, user]);
-  console.log(localStorage.key(0));
-  useEffect(() => {
-    if (!localStorage.getItem('loginAs')) {
-      localStorage.setItem('loginAs', loginToggle)
-    }
-    const loginAsStorage = localStorage.getItem("loginAs");
-    console.log(loginToggle);
-    console.log(loginAsStorage);
 
-    dispatch(loginAsUser(JSON.parse(loginAsStorage)))
-
-  }, [loginToggle]);
   const onChangeHandler = (e) => {
     if (errorMessage) {
       seterrorMessage('')
@@ -47,15 +54,14 @@ const Login = () => {
       return prev;
     });
   }
+
   const onSubmitHandler = (e) => {
     e.preventDefault()
     const form = e.currentTarget;
     if (form.checkValidity()) {
       e.stopPropagation();
-      // localStorage.setItem('loginAs', loginToggle)
       signIn(loginData.email, loginData.password)
         .then(() => {
-          // localStorage.setItem(loginAs, loginToggle)
           seterrorMessage('')
           navigate('/')
         })
@@ -65,9 +71,6 @@ const Login = () => {
   }
   const loginAs = () => {
     setloginToggle(!loginToggle)
-    localStorage.setItem('loginAs', loginToggle)
-    console.log(loginToggle);
-    // dispatch(loginAsUser(loginToggle))
   }
 
   return <>
@@ -78,7 +81,7 @@ const Login = () => {
             <div className='csrd-group'>
               <div className={style.loginForm + ' p-4'}>
                 <div className='card-body'>
-                  <img src={loginToggle ? librarianIcon : studentIcon} width='80' />
+                  <img src={loginToggle ? librarianIcon : studentIcon} width='80' alt='' />
                   <Form className='m-auto' onSubmit={onSubmitHandler} noValidate validated={validated}>
                     {errorMessage
                       ? <h3 className='text-danger'>{errorMessage}</h3>
@@ -109,7 +112,7 @@ const Login = () => {
                         <Button variant="primary" type="submit">Submit</Button>
                       </div>
                       <div className='col-6 text-right'>
-                        <Button onClick={loginAs}>Login as {!loginToggle ? 'librarian' : 'student'}</Button>
+                        <Button onClick={() => loginAs()}>Login as {!loginToggle ? 'librarian' : 'student'}</Button>
                       </div>
                     </div>
                   </Form>

@@ -1,0 +1,9 @@
+@media (max-width: 768px) {
+  .booksBlock {
+    display: block !important;
+  }
+  .booksBlock > * {
+    display: flex !important;
+    width: 100% !important;
+  }
+}

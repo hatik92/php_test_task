@@ -11,7 +11,7 @@ const BookModal = ({ show, handleClose, bookId }) => {
   const { assignStudents, book, assignedProcessStop, assignStudentsLoading } = useSelector(store => store.book);
 
   const filterStudents = assignStudents.filter(student => {
-    return (student.surname.toLowerCase().includes(searchValue.toLowerCase()) || student.first_name.toLowerCase().includes(searchValue.toLowerCase()))
+    return (student.surname.toLowerCase().includes(searchValue.toLowerCase()) || student.name.toLowerCase().includes(searchValue.toLowerCase()))
   })
   
   const clearSearchValue = () => {

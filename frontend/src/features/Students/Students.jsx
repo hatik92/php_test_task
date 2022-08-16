@@ -17,7 +17,7 @@ const Students = () => {
   }, [dispatch]);
   const searchValue = searchParams.get("search")? searchParams.get("search"): ''
   const filterStudents = allStudents.filter(student => {
-    return (student.surname.toLowerCase().includes(searchValue.toLowerCase()) || student.first_name.toLowerCase().includes(searchValue.toLowerCase()))
+    return (student.surname.toLowerCase().includes(searchValue.toLowerCase()) || student.name.toLowerCase().includes(searchValue.toLowerCase()))
   })
   if (!initialized) {
     return <BookLoader />

@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\BookController;
 use App\Http\Controllers\Api\StudentController;
+use App\Http\Controllers\Api\BookController;
 use App\Http\Responses\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,16 +22,19 @@ Route::post('login', [LoginController::class, 'login']);
 Route::post('loginStudent', [LoginController::class, 'loginStudent']);
 Route::post('loginDashboard', [LoginController::class, 'loginAdmin']);
 Route::post('logout', [LoginController::class, 'logout']);
+Route::post('logoutStudent', [LoginController::class, 'logoutStudent']);
 
+
+Route::middleware('auth:student')->get('/student', function (Request $request) {
+    return $request->user('student');
+});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::middleware('auth:sanctum')->get('/student', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => 'auth:student'], function () {
+    Route::get( '/student/books', [\App\Http\Controllers\Api\Students\BookController::class, 'index']);
 });
-
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResources([

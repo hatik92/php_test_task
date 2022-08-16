@@ -19,7 +19,7 @@ function App() {
     apiUrl: process.env.REACT_APP_API_URL,
     csrfCookieRoute: "sanctum/csrf-cookie",
     signInRoute,
-    signOutRoute: "api/logout",
+    signOutRoute,
     userObjectRoute,
   };
   console.log(signInRoute, signOutRoute, userObjectRoute);
@@ -35,3 +35,7 @@ function App() {
 }
 
 export default App;
+
+
+
+// https://t.me/progbook/383

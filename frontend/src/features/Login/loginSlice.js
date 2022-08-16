@@ -2,10 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const initialState = {
-  loginAs: 'librarian',
-  signInRoute: "api/login",
-  signOutRoute: "api/logout",
-  userObjectRoute: "api/user",
+  loginAs: 'student',
+  signInRoute: "api/loginStudent",
+  signOutRoute: "api/logoutStudent",
+  userObjectRoute: "api/student",
 }
 
 export const loginSlice = createSlice({
@@ -16,10 +16,12 @@ export const loginSlice = createSlice({
       if (action.payload) {
         state.loginAs= 'librarian'
         state.signInRoute = "api/login"
+        state.signOutRoute = "api/logout"
         state.userObjectRoute = "api/user"
       } else {
         state.loginAs= 'student'
         state.signInRoute = "api/loginStudent"
+        state.signOutRoute = "api/logoutStudent"
         state.userObjectRoute = "api/student"
       }
     }

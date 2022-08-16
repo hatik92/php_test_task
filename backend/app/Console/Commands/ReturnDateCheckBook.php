@@ -44,7 +44,7 @@ class ReturnDateCheckBook extends Command
      */
     public function handle()
     {
-        $students = Student::select('students.username', 'students.first_name', 'book_student.book_id')
+        $students = Student::select('students.username', 'students.name', 'book_student.book_id')
             ->join('book_student','students.id','=','book_student.student_id')
             ->where('return_date','=',Carbon::now()->addDay()->format("Y-m-d"))
             ->get();

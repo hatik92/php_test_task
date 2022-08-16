@@ -77,4 +77,9 @@ class LoginController extends Controller
     {
         return Auth::logout();
     }
+
+    public function logoutStudent()
+    {
+        return Auth::guard('student')->logout();
+    }
 }

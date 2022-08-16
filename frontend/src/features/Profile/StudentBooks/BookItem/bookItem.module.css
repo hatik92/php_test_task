@@ -1,0 +1,24 @@
+.bookLink {
+  color: black;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.bookLink:hover {
+  color: black;
+}
+
+.bookBlock {
+  height: 100%;
+  background-color: rgb(255 255 255 / 50%) !important;
+}
+
+@media (max-width: 768px) {
+  .bookItem {
+    justify-content: center;
+  }
+  /* .booksBlock > * {
+    display: flex !important;
+    width: 100% !important;
+  } */
+}

@@ -16,6 +16,7 @@ apiConfig.interceptors.response.use(
       console.log('?', error);
     }
     if (error.response.status === 401 || error.response.status === 419) {
+      return
       logout()
     }
     if (error.response.status === 404) {
@@ -26,8 +27,13 @@ apiConfig.interceptors.response.use(
   });
 
 export const books = {
+  // getAllBooks(current_page = 1, search = '') {
+  //   return apiConfig.get('/api/books?page=' + current_page + (search === '' ? '' : ('&search=' + search)))
+  //     .then(res => res)
+  // },
+  // getAllBooksForStudent
   getAllBooks(current_page = 1, search = '') {
-    return apiConfig.get('/api/books?page=' + current_page + '&search=' + search)
+    return apiConfig.get('/api/student/books?page=' + current_page + (search === '' ? '' : ('&search=' + search)))
       .then(res => res)
   },
   getBookById(id) {

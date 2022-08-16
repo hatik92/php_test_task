@@ -17,7 +17,7 @@ const StudentModalItem = ({ student, bookId, assignedProcessStop, clearSearchVal
   return <>
     <li
       className="list-group-item d-flex justify-content-between align-items-center">
-      {student.first_name} {student.surname}
+      {student.name} {student.surname}
       <Button variant="success"
         className={style.btn}
         onClick={() => assignHandler(+bookId, student.id)}

@@ -22,7 +22,7 @@ class Subscribe extends Mailable
     public function __construct($student)
     {
         $this->email    = $student->username;
-        $this->name     = $student->first_name;
+        $this->name     = $student->name;
         $this->bookId   = $student->book_id;
     }
 

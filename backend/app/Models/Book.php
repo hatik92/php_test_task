@@ -24,7 +24,7 @@ class Book extends Model
     {
 //        dd($this->belongsToMany(Student::class)->toSql());
         return $this->belongsToMany(Student::class)
-            ->select(['students.id', 'students.username', 'students.first_name', 'students.surname', 'book_student.return_date']);
+            ->select(['students.id', 'students.username', 'students.name', 'students.surname', 'book_student.return_date']);
 //        return $this->belongsToMany(User::class)
 //            ->select(['users.id', 'users.name', 'users.email', 'book_student.return_date']);
     }

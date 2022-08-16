@@ -2,7 +2,7 @@ import Pagination from 'react-bootstrap/Pagination';
 import { useDispatch } from 'react-redux';
 import { NavLink, useLocation, useSearchParams } from "react-router-dom";
 
-const BootstrapPagination = ({ pagination, links, getData, current_page = 1 }) => {
+const BootstrapPagination = ({ pagination, links, getData, current_page = 1, path }) => {
 
   const dispatch = useDispatch();
   let location = useLocation()
@@ -22,7 +22,7 @@ const BootstrapPagination = ({ pagination, links, getData, current_page = 1 }) =
       <li key={i} className="page-item">
         <NavLink
           className={'page-link ' + activePage }
-          to={'/books/' + pagination.links[i].label + location.search}
+          to={path + pagination.links[i].label + location.search}
           onClick={() => changePageHandler(pagination.links[i].label)}
           disabled={pagination.links[i].label === '...'}
         >

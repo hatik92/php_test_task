@@ -12,7 +12,7 @@ const StudentItem = ({ student }) => {
       <div className='info mx-4'>
         <p className='h5'>
           <Link to={'/student/' + student.id}>
-            {student.first_name} {student.surname}
+            {student.name} {student.surname}
           </Link>
         </p>
         <p>{student.facultet}</p>
