@@ -8,6 +8,7 @@ use App\Models\Book;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
@@ -51,8 +52,12 @@ class StudentController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id = null)
     {
+        if (!$id) {
+            $id = Auth::guard('student')->user()->getAuthIdentifier();
+        }
+
         $books = Book::select('books.*', 'book_student.return_date')
             ->join('book_student','books.id','=','book_student.book_id')
             ->where('student_id','=',$id)

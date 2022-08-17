@@ -8,13 +8,16 @@ import { loginAsUser } from './features/Login/loginSlice';
 
 
 function App() {
-  const {signInRoute, signOutRoute, userObjectRoute} = useSelector(store => store.login)
+  const {signInRoute, signOutRoute} = useSelector(store => store.login)
   // const dispatch = useDispatch()
   
-  // const loginAs = localStorage.getItem("loginAs");
+  // const loginAs = sessionStorage.getItem("loginAs");
   // useEffect(() => {
   //   dispatch(loginAsUser(JSON.parse(loginAs)))
   // }, [loginAs]);
+  let userObjectRoute = ''
+  JSON.parse(sessionStorage.getItem("loginAs")) ? userObjectRoute = "api/user" : userObjectRoute = "api/student"
+
   const sanctumConfig = {
     apiUrl: process.env.REACT_APP_API_URL,
     csrfCookieRoute: "sanctum/csrf-cookie",

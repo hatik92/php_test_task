@@ -1,0 +1,17 @@
+.profileBackground {
+  background-color: rgb(255 255 255 / 68%);
+}
+
+.profile_head {
+  transform: translateY(5rem)
+}
+
+.imgBlock{
+  display: grid;
+}
+
+.cover {
+  background-image: url('../../images/book_cover.png');
+  background-size: cover;
+  background-repeat: no-repeat
+}

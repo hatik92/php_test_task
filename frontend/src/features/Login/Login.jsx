@@ -12,7 +12,7 @@ import studentIcon from '../../images/student.png'
 import { useRef } from 'react';
 
 const Login = () => {
-  const loginAsStorage = localStorage.getItem("loginAs");
+  const loginAsStorage = sessionStorage.getItem("loginAs");
   const [loginToggle, setloginToggle] = useState(loginAsStorage ? JSON.parse(loginAsStorage) : false);
   const [loginData, setloginData] = useState({ email: '', password: '' });
   const [validated, setValidated] = useState(false);
@@ -27,7 +27,7 @@ const Login = () => {
       isFirstRender.current = false;
       return;
     }
-    localStorage.setItem('loginAs', loginToggle)
+    sessionStorage.setItem('loginAs', loginToggle)
     dispatch(loginAsUser(loginToggle))
   }, [loginToggle, dispatch]);
 
@@ -42,6 +42,7 @@ const Login = () => {
     if (authenticated) {
       navigate('/')
       dispatch(getUser(user))
+      dispatch(loginAsUser(JSON.parse(loginAsStorage)))
     }
   }, [authenticated, dispatch, navigate, user]);
 

@@ -27,15 +27,15 @@ apiConfig.interceptors.response.use(
   });
 
 export const books = {
-  // getAllBooks(current_page = 1, search = '') {
-  //   return apiConfig.get('/api/books?page=' + current_page + (search === '' ? '' : ('&search=' + search)))
-  //     .then(res => res)
-  // },
-  // getAllBooksForStudent
   getAllBooks(current_page = 1, search = '') {
-    return apiConfig.get('/api/student/books?page=' + current_page + (search === '' ? '' : ('&search=' + search)))
+    return apiConfig.get('/api/all-books?page=' + current_page + (search === '' ? '' : ('&search=' + search)))
       .then(res => res)
   },
+  // getAllBooksForStudent
+  // getAllBooksAsStudent(current_page = 1, search = '') {
+  //   return apiConfig.get('/api/student/books?page=' + current_page + (search === '' ? '' : ('&search=' + search)))
+  //     .then(res => res)
+  // },
   getBookById(id) {
     return apiConfig.get('/api/books/' + id)
       .then(res => res.data)
@@ -57,6 +57,13 @@ export const students = {
   },
   getStudentById(id) {
     return apiConfig.get('/api/students/' + id)
+      // .then(res => res.data)
+  }
+}
+
+export const profile = {
+  getProfile() {
+    return apiConfig.get('/api/profile')
       // .then(res => res.data)
   }
 }

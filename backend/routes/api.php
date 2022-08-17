@@ -1,12 +1,11 @@
 <?php
 
-use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\Api\BookController;
-use App\Http\Responses\ApiResponse;
+use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\Api\StudentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\LoginController;
-use App\Http\Controllers\SubscriberController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,15 +24,17 @@ Route::post('logout', [LoginController::class, 'logout']);
 Route::post('logoutStudent', [LoginController::class, 'logoutStudent']);
 
 
-Route::middleware('auth:student')->get('/student', function (Request $request) {
-    return $request->user('student');
-});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get( '/all-books', [BookController::class, 'index']);
 Route::group(['middleware' => 'auth:student'], function () {
-    Route::get( '/student/books', [\App\Http\Controllers\Api\Students\BookController::class, 'index']);
+    Route::get( '/student', [StudentController::class, 'show']);
+//    Route::apiResources([
+//        'books' => BookController::class,
+//        'students' => StudentController::class
+//    ]);
 });
 
 Route::group(['middleware' => 'auth:sanctum'], function () {

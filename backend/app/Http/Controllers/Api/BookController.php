@@ -10,12 +10,9 @@ use App\Http\Responses\ApiResponse;
 use App\Models\Book;
 use App\Models\Student;
 use Carbon\Carbon;
-use Goutte\Client;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Faker\Factory as Faker;
 
 class BookController extends Controller
 {
