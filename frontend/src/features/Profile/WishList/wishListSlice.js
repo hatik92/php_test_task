@@ -24,9 +24,9 @@ export const addToWishList = createAsyncThunk(
   async (payload,{rejectWithValue, dispatch, getState}) => {
     try {
       const response = await wishList.addToWishList(payload)
-      debugger
-      // if (response.statusText !== 'OK') throw new Error(response.response.data.error)
-      return response.data
+      // debugger
+      if (response.statusText !== 'OK') throw new Error(response.response.data.error)
+      return
     } catch (error) {
       return rejectWithValue(error.response)
     }

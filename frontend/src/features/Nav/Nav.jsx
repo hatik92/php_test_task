@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSanctum } from "react-sanctum";
 import { getUser } from '../../appSlice';
 import { loginAsUser } from '../Login/loginSlice';
+import { Button } from 'react-bootstrap';
 
 const Navigation = () => {
   const { authenticated, user, signOut, checkAuthentication } = useSanctum();
@@ -97,9 +98,9 @@ const Navigation = () => {
             : ''}
           {!authenticated
             ? <Link className='btn btn-outline-success' to='/login' >LogIn</Link>
-            : <Link className='btn btn-outline-success' to='/login'
+            : <Button variant='outline-success'
               onClick={logoutHandler}
-            >Logout</Link>
+            >Logout</Button>
           }
         </Navbar.Collapse>
       </Container>
