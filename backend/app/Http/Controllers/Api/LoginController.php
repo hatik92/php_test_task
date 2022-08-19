@@ -67,7 +67,6 @@ class LoginController extends Controller
             return response()
                 ->json(['message' => 'Is not admin!'])
                 ->withCallback($request->input('callback'));
-            return 'Is not admin!';
         }
 
         return Auth::user();
@@ -75,7 +74,9 @@ class LoginController extends Controller
 
     public function logout()
     {
-        return Auth::logout();
+        Auth::logout();
+        Auth::guard('student')->logout();
+        return;
     }
 
     public function logoutStudent()

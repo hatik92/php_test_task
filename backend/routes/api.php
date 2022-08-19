@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\WishListController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get( '/all-books', [BookController::class, 'index']);
 Route::group(['middleware' => 'auth:student'], function () {
     Route::get( '/student', [StudentController::class, 'show']);
+    Route::get('/getWishList', [WishListController::class, 'index']);
+    Route::post('/addToWishList/{book_id}', [WishListController::class, 'addToWishList']);
 //    Route::apiResources([
 //        'books' => BookController::class,
 //        'students' => StudentController::class
@@ -45,7 +48,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/books/detach', [BookController::class, 'detachBook']);
     Route::post('/books/assign', [BookController::class, 'assignBook']);
 });
-
+Route::get('/wishlist', [\App\Http\Controllers\Api\WishListController::class, 'index']);
 //Route::get('scraper', [BookController::class, 'libery']);
 
 

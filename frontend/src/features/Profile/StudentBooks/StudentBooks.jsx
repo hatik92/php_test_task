@@ -13,6 +13,7 @@ import BookLoader from '../../../Common/Loader/BookLoader';
 const StudentBooks = () => {
   const { page } = useParams();
   const { initialized, books: allBooks, meta, links } = useSelector(store => store.books);
+  const { books: myBooks } = useSelector(store => store.app.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -40,7 +41,7 @@ const StudentBooks = () => {
           ? <>
             <div className={'px-2 row row-cols-5 ' + style.booksBlock}>
               {allBooks.map((book) =>
-                <BookItem key={book.id} book={book} />)}
+                <BookItem key={book.id} book={book} myBooks={myBooks} />)}
             </div>
           <div className='d-flex justify-content-center'>
             <BootstrapPagination pagination={meta} links={links} getData={getBooks} current_page={page} path='/studentBooks/' />

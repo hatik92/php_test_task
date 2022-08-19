@@ -7,19 +7,28 @@ import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSanctum } from "react-sanctum";
 import { getUser } from '../../appSlice';
+import { loginAsUser } from '../Login/loginSlice';
 
 const Navigation = () => {
   const { authenticated, user, signOut, checkAuthentication } = useSanctum();
   const { loginAs } = useSelector(store => store.login);
-  console.log(loginAs);
+
   const dispatch = useDispatch()
   const navigate = useNavigate();
   let location = useLocation();
+
   let [searchParams, setSearchParams] = useSearchParams();
   useEffect(() => {
+    if (!sessionStorage.getItem("loginAs") || !['librarian', 'student', 'admin'].some(user => user === sessionStorage.getItem("loginAs"))) {
+      console.log(sessionStorage.getItem("loginAs"));
+      sessionStorage.setItem("loginAs", "librarian")
+      signOut()
+      navigate("/login")
+    }
     checkAuthentication()
       .then(res => {
         if (res && authenticated) {
+          dispatch(loginAsUser(sessionStorage.getItem("loginAs")))
           dispatch(getUser(user))
         } else if (authenticated === false) {
           navigate("/login")
@@ -61,6 +70,7 @@ const Navigation = () => {
               ? <>
               <Link className='nav-link' to="/studentBooks">Books</Link>
               <Link className='nav-link' to="/profile">Profile</Link>
+              <Link className='nav-link' to="/wishlist">Wish list</Link>
               </>
               : <>
               <Link className='nav-link' to="/books">Books</Link>

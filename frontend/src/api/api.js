@@ -16,7 +16,7 @@ apiConfig.interceptors.response.use(
       console.log('?', error);
     }
     if (error.response.status === 401 || error.response.status === 419) {
-      return
+      // return
       logout()
     }
     if (error.response.status === 404) {
@@ -32,10 +32,10 @@ export const books = {
       .then(res => res)
   },
   // getAllBooksForStudent
-  // getAllBooksAsStudent(current_page = 1, search = '') {
-  //   return apiConfig.get('/api/student/books?page=' + current_page + (search === '' ? '' : ('&search=' + search)))
-  //     .then(res => res)
-  // },
+  getAllBooksAsStudent(current_page = 1, search = '') {
+    return apiConfig.get('/api/student/books?page=' + current_page + (search === '' ? '' : ('&search=' + search)))
+      .then(res => res)
+  },
   getBookById(id) {
     return apiConfig.get('/api/books/' + id)
       .then(res => res.data)
@@ -64,6 +64,14 @@ export const students = {
 export const profile = {
   getProfile() {
     return apiConfig.get('/api/profile')
-      // .then(res => res.data)
+  }
+}
+
+export const wishList = {
+  getWishList() {
+    return apiConfig.get('/api/getWishList')
+  },
+  addToWishList(bookId) {
+    return apiConfig.post('/api/addToWishList/' + bookId)
   }
 }

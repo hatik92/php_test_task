@@ -12,6 +12,7 @@ import NotFound from "./Common/404notFound/NotFound";
 import ServerError from './Common/ServerError/ServerError';
 import Profile from './features/Profile/Profile';
 import StudentBooks from "./features/Profile/StudentBooks/StudentBooks";
+import WishList from './features/Profile/WishList/WishList';
 
 function Router() {
   const { initializad } = useSelector(store => store.app)
@@ -28,6 +29,7 @@ function Router() {
         <Route path=":page" element={<StudentBooks />} />
       </Route>
       <Route path="profile" element={<Profile />}></Route>
+      <Route path="wishlist" element={<WishList />}></Route>
       </>}
       <Route path="books" element={<Books />} >
         <Route index element={<Books />} />

@@ -28,4 +28,9 @@ class Book extends Model
 //        return $this->belongsToMany(User::class)
 //            ->select(['users.id', 'users.name', 'users.email', 'book_student.return_date']);
     }
+
+    public function wish_list()
+    {
+        return $this->hasMany(WishList::class)->select('books.*');
+    }
 }

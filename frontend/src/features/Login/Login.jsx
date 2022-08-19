@@ -13,7 +13,7 @@ import { useRef } from 'react';
 
 const Login = () => {
   const loginAsStorage = sessionStorage.getItem("loginAs");
-  const [loginToggle, setloginToggle] = useState(loginAsStorage ? JSON.parse(loginAsStorage) : false);
+  const [loginToggle, setloginToggle] = useState(loginAsStorage);
   const [loginData, setloginData] = useState({ email: '', password: '' });
   const [validated, setValidated] = useState(false);
   const [errorMessage, seterrorMessage] = useState('');
@@ -21,7 +21,6 @@ const Login = () => {
   const navigate = useNavigate()
   const { authenticated, user, signIn } = useSanctum();
   const isFirstRender = useRef(true);
-
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
@@ -35,14 +34,14 @@ const Login = () => {
     if (!loginAsStorage) {
       return
     }
-    dispatch(loginAsUser(JSON.parse(loginAsStorage)))
+    dispatch(loginAsUser(loginAsStorage))
   }, [dispatch]);
-  
+
   useEffect(() => {
     if (authenticated) {
       navigate('/')
       dispatch(getUser(user))
-      dispatch(loginAsUser(JSON.parse(loginAsStorage)))
+      dispatch(loginAsUser(loginAsStorage))
     }
   }, [authenticated, dispatch, navigate, user]);
 
@@ -70,8 +69,9 @@ const Login = () => {
     }
     setValidated(true);
   }
-  const loginAs = () => {
-    setloginToggle(!loginToggle)
+  const loginAs = (e) => {
+    // console.log(e.target.value);
+    setloginToggle(e.target.value)
   }
 
   return <>
@@ -82,11 +82,11 @@ const Login = () => {
             <div className='csrd-group'>
               <div className={style.loginForm + ' p-4'}>
                 <div className='card-body'>
-                  <img src={loginToggle ? librarianIcon : studentIcon} width='80' alt='' />
+                  <img src={loginToggle === "student" ? studentIcon : librarianIcon} width='80' alt='' />
                   <Form className='m-auto' onSubmit={onSubmitHandler} noValidate validated={validated}>
                     {errorMessage
                       ? <h3 className='text-danger'>{errorMessage}</h3>
-                      : <h3 className='text-success'>Plase login</h3>
+                      : <h3 className='text-success'>Login as {loginToggle}</h3>
                     }
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                       <Form.Control
@@ -113,7 +113,13 @@ const Login = () => {
                         <Button variant="primary" type="submit">Submit</Button>
                       </div>
                       <div className='col-6 text-right'>
-                        <Button onClick={() => loginAs()}>Login as {!loginToggle ? 'librarian' : 'student'}</Button>
+                        <Form.Select onChange={loginAs} value={loginToggle} aria-label="Default select example">
+                          {/* <option>Select consumer</option> */}
+                          <option value="librarian">Librarian</option>
+                          <option value="student">Student</option>
+                          {/* <option value="admin">Three</option> */}
+                        </Form.Select>
+                        {/* <Button variant='link' onClick={() => loginAs()}>Login as {loginToggle}</Button> */}
                       </div>
                     </div>
                   </Form>

@@ -19,10 +19,18 @@ class BookController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index(Request $request)
     {
+        if (Auth::guard('student')->check()) {
+            return BookResource::collection(Book::
+                whereNotIn('id', function ($query){
+                    $query->select('book_id')
+                        ->from('book_student')
+                        ->where('student_id', '=', Auth::guard('student')->user()->id)->get();
+                })->orderByDesc('id')->paginate(20));
+        }
         if ($request->search && $request->search != '') {
             $search = $request->search;
             return BookResource::collection(Book::where('title', 'LIKE', "%{$search}%")

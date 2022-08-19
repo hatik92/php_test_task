@@ -5,6 +5,7 @@ import { getProfile } from './profileSlice';
 import { useSelector } from 'react-redux';
 import BookItem from './../Books/BookItem/BookItem';
 import style from './profile.module.css';
+import { Link } from 'react-router-dom';
 
 const Profile = () => {
   const { user } = useSelector(store => store.app)
@@ -20,7 +21,7 @@ const Profile = () => {
             <div className={"d-flex align-items-center " + style.profile_head}>
               <div className={"profile me-3 " + style.imgBlock}>
                 <img src={user.image} alt="..." width="130" className="rounded mb-2 img-thumbnail" />
-                <a href="#" className="btn btn-outline-dark btn-sm btn-block">Wish list</a>
+                <Link to='/wishlist' className="btn btn-outline-dark btn-sm btn-block">Wish list</Link>
               </div>
               <div className="media-body mb-5 text-white">
                 <h4 className="mt-0 mb-0">{user.name} {user.surname}</h4>
