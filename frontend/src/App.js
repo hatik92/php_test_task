@@ -3,10 +3,11 @@ import Router from './router';
 import { BrowserRouter } from 'react-router-dom';
 import { Sanctum } from "react-sanctum";
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { loginAsUser } from './features/Login/loginSlice';
+import ExperementContext from './features/experementContext/ExperementContext';
 
-
+export const AppContext = React.createContext({})
 function App() {
   const { signInRoute } = useSelector(store => store.login)
   // const dispatch = useDispatch()
@@ -23,7 +24,7 @@ function App() {
         return "api/user"
       case 'admin':
         return "api/admin"
-      default: 
+      default:
         return
     }
   }
@@ -39,6 +40,9 @@ function App() {
   };
 
   return <>
+    {/* <AppContext.Provider value='Hello World!'>
+      <ExperementContext />
+    </AppContext.Provider> */}
     <div className='bookParent'>
       <Sanctum config={sanctumConfig} checkOnInit={false}>
         <BrowserRouter>
